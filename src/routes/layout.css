@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+@import '@fontsource/plus-jakarta-sans';
+
+@import '@skeletonlabs/skeleton'; 
+@import '@skeletonlabs/skeleton-svelte'; 
+@import '@skeletonlabs/skeleton/themes/nosh';
+
+[data-theme='nosh'] {
+	--heading-font-family: 'Plus Jakarta Sans', sans-serif;
+	--base-font-family: 'Plus Jakarta Sans', sans-serif;
+	--anchor-font-family: 'inherit';
+}
