@@ -1,7 +1,16 @@
-<script>
+<script lang="ts">
   import WindowFrame from '$lib/components/WindowFrame.svelte';
   import { notes } from '$lib/stores/notesStore';
   import { todos } from '$lib/stores/todosStore';
+
+  // Tambahkan interface
+  interface Todo {
+    id: number;
+    text: string;
+    completed: boolean;
+    createdAt: string;
+  }
+
 </script>
 
 <WindowFrame title="Dashboard" isLocked={true}>
@@ -15,7 +24,7 @@
         <div class="space-y-2">
           <p>Total Notes: {$notes.length}</p>
           <p>Total Todos: {$todos.length}</p>
-          <p>Completed Todos: {$todos.filter(t => t.completed).length}</p>
+          <p>Completed Todos: {$todos.filter((t: Todo) => t.completed).length}</p>
         </div>
       </div>
       
