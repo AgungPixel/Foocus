@@ -6,7 +6,7 @@
   let sidebarOpen = true;
 </script>
 
-<div class="flex h-screen bg-gray-100">
+<div class="flex h-screen bg-surface-950">
   <Sidebar bind:isOpen={sidebarOpen} />
   
   <main class="flex-1 overflow-hidden">

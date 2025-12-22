@@ -31,7 +31,7 @@
           bind:value={newTodoText}
           on:keydown={handleKeyPress}
           placeholder="What needs to be done? (Press Enter to save)"
-          class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent" />
+          class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent bg-surface-950" />
         
         <button 
           on:click={addTodo}

@@ -34,13 +34,13 @@
 <WindowFrame title="Notes Manager" isLocked={true}>
   <div class="space-y-6">
     <!-- Add New Note -->
-    <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+    <div class="bg-surface-950 p-6 rounded-lg shadow border border-surface-950">
       <h3 class="text-xl font-semibold mb-4">Create New Note</h3>
       <div class="space-y-4">
         <textarea
           bind:value={newNote}
           placeholder="Type your note here..."
-          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
+          class="w-full p-3 border border-surface-950 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent bg-surface-950"
           rows="4"></textarea>
         
         <div class="flex justify-end">
@@ -56,7 +56,7 @@
     </div>
     
     <!-- Notes List -->
-    <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+    <div class="bg-surface-950 p-6 rounded-lg shadow border border-surface-950">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-semibold">Your Notes ({$notes.length})</h3>
         {#if $notes.length > 0}
