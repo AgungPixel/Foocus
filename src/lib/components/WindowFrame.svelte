@@ -22,7 +22,7 @@
 </script>
 
 {#if !isClosed}
-<div class="flex flex-col {isFullscreen ? 'fixed inset-0 z-50' : 'h-full'} bg-white 
+<div class="flex flex-col {isFullscreen ? 'fixed inset-0 z-50' : 'h-full'}  
             rounded-lg shadow-xl overflow-hidden transition-all duration-300"
      in:fly={{ y: 30, duration: 300 }}
      out:fade={{ duration: 200 }}>
@@ -68,7 +68,7 @@
   </div>
   
   <!-- Window Content -->
-  <div class="flex-1 overflow-auto p-4 bg-gray-50">
+  <div class="flex-1 overflow-auto p-4">
     <slot />
   </div>
 </div>

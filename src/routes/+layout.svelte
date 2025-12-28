@@ -6,11 +6,11 @@
   let sidebarOpen = true;
 </script>
 
-<div class="flex h-screen bg-surface-950">
+<div class="flex h-screen">
   <Sidebar bind:isOpen={sidebarOpen} />
   
   <main class="flex-1 overflow-hidden">
-    <div class="p-4 h-full" in:fade={{ duration: 300 }}>
+    <div class="h-full" in:fade={{ duration: 300 }}>
       <slot />
     </div>
   </main>

@@ -15,11 +15,11 @@
 
 <WindowFrame title="Dashboard" isLocked={true}>
   <div class="space-y-6">
-    <h1 class="text-3xl font-bold text-black">Simple Notes & Todo App</h1>
+    <h1 class="text-3xl font-bold">Simple Notes & Todo App</h1>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Stats -->
-      <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+      <div class="p-6">
         <h3 class="text-xl font-semibold mb-4">📊 Statistics</h3>
         <div class="space-y-2">
           <p>Total Notes: {$notes.length}</p>
@@ -29,7 +29,7 @@
       </div>
       
       <!-- Quick Actions -->
-      <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+      <div class="p-6">
         <h3 class="text-xl font-semibold mb-4">⚡ Quick Actions</h3>
         <div class="space-y-2">
           <a href="/notes" class="block p-3 bg-black text-white rounded hover:bg-gray-800 transition-colors">
@@ -43,16 +43,16 @@
     </div>
     
     <!-- Recent Notes -->
-    <div class="bg-white p-6 rounded-lg shadow border border-gray-200">
+    <div class="p-6">
       <h3 class="text-xl font-semibold mb-4">📝 Recent Notes</h3>
       {#if $notes.length === 0}
-        <p class="text-gray-500">No notes yet. Create your first note!</p>
+        <p>No notes yet. Create your first note!</p>
       {:else}
         <div class="space-y-3">
           {#each $notes.slice(-3).reverse() as note}
-            <div class="p-3 border border-gray-200 rounded">
+            <div class="p-3">
               <p class="truncate">{note.content.substring(0, 100)}...</p>
-              <p class="text-sm text-gray-500 mt-1">
+              <p class="text-sm mt-1">
                 {new Date(note.createdAt).toLocaleDateString()}
               </p>
             </div>
