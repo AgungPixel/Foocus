@@ -1,7 +1,14 @@
 @import 'tailwindcss';
+@import '@fontsource/fira-mono';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
 @import '@skeletonlabs/skeleton'; 
 @import '@skeletonlabs/skeleton-svelte'; 
 @import '@skeletonlabs/skeleton/themes/nosh';
+
+[data-theme='nosh'] {
+	--heading-font-family: 'Fira Mono', monospace;
+	--base-font-family: 'Fira Mono', monospace;
+	--anchor-font-family: 'inherit';
+}

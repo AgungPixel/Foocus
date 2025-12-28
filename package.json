@@ -38,5 +38,8 @@
 		"vite": "^7.2.6",
 		"vitest": "^4.0.15",
 		"vitest-browser-svelte": "^2.0.1"
+	},
+	"dependencies": {
+		"@fontsource/fira-mono": "^5.2.7"
 	}
 }
