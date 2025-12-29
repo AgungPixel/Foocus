@@ -1,13 +1,14 @@
 <script>
   import { page } from '$app/stores';
   import { fly } from 'svelte/transition';
+  import { House, PanelRightClose, NotebookPen, ListTodo } from '@lucide/svelte';
   
   export let isOpen = true;
   
   const menuItems = [
-    { name: 'Home', href: '/', icon: '🏠' },
-    { name: 'Notes', href: '/notes', icon: '📝' },
-    { name: 'To-Do List', href: '/todos', icon: '✅' }
+    { name: 'Home', href: '/', icon: House },
+    { name: 'Notes', href: '/notes', icon: NotebookPen },
+    { name: 'To-Do List', href: '/todos', icon: ListTodo }
   ];
 </script>
 
@@ -24,7 +25,7 @@
     {#if isOpen}
       ← Collapse
     {:else}
-      →
+      <PanelRightClose />
     {/if}
   </button>
 
@@ -39,7 +40,11 @@
                  'bg-white text-black' : 
                  'hover:bg-gray-800'}"
         title="{isOpen ? '' : item.name}">
-        <span class="text-xl">{item.icon}</span>
+        <svelte:component
+          this={item.icon}
+          class="w-5 h-5 transition-colors"
+          color={$page.url.pathname === item.href ? 'black' : 'white'}
+        />
         {#if isOpen}
           <span class="ml-3 font-medium">{item.name}</span>
         {/if}
