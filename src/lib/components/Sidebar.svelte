@@ -77,7 +77,7 @@
 			class="overflow-hidden text-xl font-bold whitespace-nowrap transition-all duration-300
       {isOpen ? 'w-auto opacity-100' : 'md:w-0 md:opacity-0'}"
 		>
-			AgungPixel
+			Foocus
 		</span>
 
 		<button
