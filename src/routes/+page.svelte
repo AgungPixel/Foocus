@@ -19,7 +19,7 @@
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 			<!-- Stats -->
 			<div class="p-6">
-				<h3 class="mb-4 text-xl font-semibold">📊 Statistics</h3>
+				<h3 class="mb-4 text-xl font-semibold">Statistics</h3>
 				<div class="space-y-2">
 					<p>Total Notes: {$notes.length}</p>
 					<p>Total Todos: {$todos.length}</p>
@@ -29,7 +29,7 @@
 
 			<!-- Quick Actions -->
 			<div class="p-6">
-				<h3 class="mb-4 text-xl font-semibold">⚡ Quick Actions</h3>
+				<h3 class="mb-4 text-xl font-semibold">Quick Actions</h3>
 				<div class="space-y-2">
 					<a
 						href="/notes"
@@ -49,7 +49,7 @@
 
 		<!-- Recent Notes -->
 		<div class="p-6">
-			<h3 class="mb-4 text-xl font-semibold">📝 Recent Notes</h3>
+			<h3 class="mb-4 text-xl font-semibold">Recent Notes</h3>
 			{#if $notes.length === 0}
 				<p>No notes yet. Create your first note!</p>
 			{:else}
