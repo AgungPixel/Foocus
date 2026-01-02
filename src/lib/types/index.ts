@@ -1,12 +1,12 @@
 export interface Note {
-  id: number;
-  content: string;
-  createdAt: string;
+	id: number;
+	content: string;
+	createdAt: string;
 }
 
 export interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-  createdAt: string;
+	id: number;
+	text: string;
+	completed: boolean;
+	createdAt: string;
 }
