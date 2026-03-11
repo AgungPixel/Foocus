@@ -5,6 +5,7 @@
 
 	import type { Note } from '$lib/stores/notesStore.svelte';
 	import type { Todo } from '$lib/stores/todosStore.svelte';
+	import { NotebookPen, ListTodo } from 'lucide-svelte';
 </script>
 
 <WindowFrame title="Dashboard" isLocked={true}>
@@ -25,18 +26,20 @@
 			<!-- Quick Actions -->
 			<div class="p-6">
 				<h3 class="mb-4 text-xl font-semibold">Quick Actions</h3>
-				<div class="space-y-2">
+				<div class="space-y-4">
 					<a
 						href="/notes"
-						class="block rounded bg-black p-3 text-white transition-colors hover:bg-gray-800"
+						class="flex items-center rounded-lg bg-black p-4 text-white transition-colors hover:bg-gray-800 hover:shadow-lg"
 					>
-						Create New Note
+						<NotebookPen class="mr-3" size={24} />
+						<span class="font-medium">Create New Note</span>
 					</a>
 					<a
 						href="/todos"
-						class="block rounded bg-gray-800 p-3 text-white transition-colors hover:bg-gray-700"
+						class="flex items-center rounded-lg bg-gray-800 p-4 text-white transition-colors hover:bg-gray-700 hover:shadow-lg"
 					>
-						Add New Todo
+						<ListTodo class="mr-3" size={24} />
+						<span class="font-medium">Add New Todo</span>
 					</a>
 				</div>
 			</div>
