@@ -70,12 +70,15 @@
 			<div class="flex h-6 w-6 shrink-0 items-center justify-center bg-white text-black rounded-sm">
 				<span class="font-bold text-sm leading-none mt-[1px]">F</span>
 			</div>
-			<span
-				class="overflow-hidden text-base tracking-tight font-medium text-white whitespace-nowrap transition-all duration-300
-				{isOpen ? 'w-auto opacity-100' : 'w-0 opacity-0'}"
-			>
-				Foocus.
-			</span>
+			
+			<div class="grid transition-[grid-template-columns] duration-300 ease-in-out {isOpen ? 'grid-cols-[1fr]' : 'grid-cols-[0fr]'}">
+				<span
+					class="overflow-hidden text-base tracking-tight font-medium text-white whitespace-nowrap transition-opacity duration-300
+					{isOpen ? 'opacity-100' : 'opacity-0'}"
+				>
+					Foocus.
+				</span>
+			</div>
 		</a>
 
 		<button class="text-[#a3a3a3] hover:text-white md:hidden transition-colors" onclick={() => (isOpen = false)}>
@@ -85,9 +88,11 @@
 
 	<!-- Navigation Links -->
 	<nav class="flex-1 overflow-x-hidden overflow-y-auto py-6">
-		{#if isOpen}
-			<h4 class="px-6 mb-3 text-xs font-semibold uppercase tracking-wider text-[#525252] transition-opacity duration-300">Menu</h4>
-		{/if}
+		<div class="grid transition-[grid-template-rows] duration-300 ease-in-out {isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}">
+			<h4 class="overflow-hidden px-6 text-xs font-semibold uppercase tracking-wider text-[#525252]">
+				<span class="block pb-3 transition-opacity duration-300 {isOpen ? 'opacity-100' : 'opacity-0'}">Menu</span>
+			</h4>
+		</div>
 		<ul class="space-y-1 {isOpen ? 'px-3' : 'px-2'} transition-all duration-300">
 			{#each menuItems as item}
 				{@const active = isActive(item.href)}
@@ -107,13 +112,15 @@
 							<item.icon size={18} strokeWidth={active ? 2 : 1.5} />
 						</div>
 
-						<span
-							class="overflow-hidden text-sm whitespace-nowrap transition-all duration-300
-              				{isOpen ? 'ml-3 w-auto opacity-100' : 'ml-0 w-0 opacity-0 hidden'}
-            			"
-						>
-							{item.name}
-						</span>
+						<div class="grid transition-[grid-template-columns] duration-300 ease-in-out {isOpen ? 'grid-cols-[1fr]' : 'grid-cols-[0fr]'}">
+							<span
+								class="overflow-hidden text-sm whitespace-nowrap transition-opacity duration-300
+								{isOpen ? 'ml-3 opacity-100' : 'ml-0 opacity-0'}
+            				"
+							>
+								{item.name}
+							</span>
+						</div>
 					</a>
 				</li>
 			{/each}
@@ -121,18 +128,22 @@
 	</nav>
 
 	<!-- Footer Toggle Button -->
-	<div class="mt-auto shrink-0 border-t border-[#262626] p-4 flex {isOpen ? 'justify-end' : 'justify-center'}">
+	<div class="mt-auto border-t border-[#262626] p-4 flex {isOpen ? 'justify-end' : 'justify-center'} overflow-hidden">
 		<button
-			class="hidden items-center justify-center rounded-md p-2 text-[#a3a3a3] transition-colors hover:bg-[#171717] hover:text-white md:flex"
+			class="hidden items-center justify-center rounded-md p-2 text-[#a3a3a3] transition-colors hover:bg-[#171717] hover:text-white md:flex whitespace-nowrap"
 			onclick={() => (isOpen = !isOpen)}
 			aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
 		>
-			{#if isOpen}
-				<div class="flex items-center gap-2 text-xs font-medium">
-					Collapse <PanelLeftClose size={16} strokeWidth={1.5} />
+			<div class="grid transition-[grid-template-columns] duration-300 ease-in-out {isOpen ? 'grid-cols-[1fr]' : 'grid-cols-[0fr]'}">
+				<div class="overflow-hidden flex items-center gap-2 text-xs font-medium transition-opacity duration-300 {isOpen ? 'opacity-100 pr-2' : 'opacity-0'}">
+					Collapse
 				</div>
+			</div>
+			
+			{#if isOpen}
+				<PanelLeftClose size={16} strokeWidth={1.5} class="shrink-0" />
 			{:else}
-				<PanelLeftOpen size={18} strokeWidth={1.5} />
+				<PanelLeftOpen size={18} strokeWidth={1.5} class="shrink-0" />
 			{/if}
 		</button>
 	</div>
