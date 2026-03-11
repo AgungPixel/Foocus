@@ -2,6 +2,7 @@
 	import WindowFrame from '$lib/components/WindowFrame.svelte';
 	import { todos } from '$lib/stores/todosStore.svelte';
 	import { fly, fade } from 'svelte/transition';
+	import { Trash2, Plus, PartyPopper } from 'lucide-svelte';
 
 	let newTodoText = '';
 
@@ -24,7 +25,7 @@
 	<div class="space-y-6">
 		<!-- Add New Todo -->
 		<div>
-			<h3 class="mb-4 text-xl font-semibold">➕ Add New Task</h3>
+			<h3 class="mb-4 flex items-center text-xl font-semibold"><Plus size={24} class="mr-2" /> Add New Task</h3>
 			<div class="flex gap-3">
 				<input
 					type="text"
@@ -78,7 +79,7 @@
 
 			{#if todos.value.length === 0}
 				<div class="py-8 text-center" in:fade>
-					<p class="text-lg text-gray-500">🎉 No tasks yet! Add your first task above.</p>
+					<p class="flex items-center justify-center text-lg text-gray-500"><PartyPopper size={24} class="mr-2" /> No tasks yet! Add your first task above.</p>
 				</div>
 			{:else}
 				<div class="space-y-3">
@@ -110,10 +111,10 @@
 							<!-- Delete Button -->
 							<button
 								onclick={() => todos.deleteTodo(todo.id)}
-								class="p-2 text-gray-400 transition-colors hover:text-red-600"
+								class="flex items-center p-2 text-gray-400 transition-colors hover:text-red-600"
 								title="Delete task"
 							>
-								🗑️
+								<Trash2 size={20} />
 							</button>
 						</div>
 					{/each}

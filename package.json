@@ -41,6 +41,6 @@
 	},
 	"dependencies": {
 		"@fontsource/fira-mono": "^5.2.7",
-		"@lucide/svelte": "^0.562.0"
+		"lucide-svelte": "^0.577.0"
 	}
 }

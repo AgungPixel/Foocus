@@ -1,5 +1,6 @@
 <script>
 	import { fly, fade } from 'svelte/transition';
+	import { Lock, Unlock, Maximize, X } from 'lucide-svelte';
 
 	let { title = 'Window', isLocked = $bindable(true), isFullscreen = $bindable(false), children, onclose = () => {} } = $props();
 
@@ -35,9 +36,9 @@
 					title={isLocked ? 'Unlock window' : 'Lock window'}
 				>
 					{#if isLocked}
-						🔒
+						<Lock size={16} />
 					{:else}
-						🔓
+						<Unlock size={16} />
 					{/if}
 				</button>
 
@@ -47,11 +48,7 @@
 					onclick={toggleFullscreen}
 					title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
 				>
-					{#if isFullscreen}
-						⤢
-					{:else}
-						⤢
-					{/if}
+					<Maximize size={16} />
 				</button>
 
 				<!-- Close Button -->
@@ -60,7 +57,7 @@
 					onclick={closeWindow}
 					title="Close window"
 				>
-					✕
+					<X size={16} />
 				</button>
 			</div>
 		</div>

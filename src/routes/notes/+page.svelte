@@ -2,6 +2,7 @@
 	import WindowFrame from '$lib/components/WindowFrame.svelte';
 	import { notes } from '$lib/stores/notesStore.svelte';
 	import { fade } from 'svelte/transition';
+	import { Copy, Download, Trash2 } from 'lucide-svelte';
 
 	let newNote = '';
 
@@ -90,26 +91,26 @@
 								<div class="flex space-x-2">
 									<button
 										onclick={() => copyToClipboard(note.content)}
-										class="rounded bg-gray-800 px-3 py-1 text-white transition-colors hover:bg-gray-700"
+										class="flex items-center gap-1 rounded bg-gray-800 px-3 py-1 text-white transition-colors hover:bg-gray-700"
 										title="Copy note"
 									>
-										📋 Copy
+										<Copy size={16} /> Copy
 									</button>
 
 									<button
 										onclick={() => downloadNote(note.content, i)}
-										class="rounded bg-black px-3 py-1 text-white transition-colors hover:bg-gray-800"
+										class="flex items-center gap-1 rounded bg-black px-3 py-1 text-white transition-colors hover:bg-gray-800"
 										title="Download note"
 									>
-										⬇️ Download
+										<Download size={16} /> Download
 									</button>
 
 									<button
 										onclick={() => notes.deleteNote(note.id)}
-										class="rounded bg-red-600 px-3 py-1 text-white transition-colors hover:bg-red-700"
+										class="flex items-center justify-center rounded bg-red-600 px-3 py-1 text-white transition-colors hover:bg-red-700"
 										title="Delete note"
 									>
-										🗑️
+										<Trash2 size={16} />
 									</button>
 								</div>
 							</div>
