@@ -15,8 +15,8 @@
 
 	<main
 		class="
-    transition-all duration-300 ease-in-out
-    {sidebarOpen ? 'md:ml-64' : 'md:ml-20'}
+    transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
+    {sidebarOpen ? 'md:ml-[290px]' : 'md:ml-[120px]'}
   "
 	>
 		<div
