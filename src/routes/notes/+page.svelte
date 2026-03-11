@@ -46,7 +46,7 @@
 
 				<div class="flex justify-end">
 					<button
-						on:click={addNote}
+						onclick={addNote}
 						class="rounded-lg bg-black px-6 py-2 text-white transition-colors hover:bg-gray-800
                    disabled:cursor-not-allowed disabled:opacity-50"
 						disabled={!newNote.trim()}
@@ -63,7 +63,7 @@
 				<h3 class="text-xl font-semibold">Your Notes ({notes.value.length})</h3>
 				{#if notes.value.length > 0}
 					<button
-						on:click={() => notes.clearAll()}
+						onclick={() => notes.clearAll()}
 						class="rounded-lg bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
 					>
 						Clear All
@@ -89,7 +89,7 @@
 
 								<div class="flex space-x-2">
 									<button
-										on:click={() => copyToClipboard(note.content)}
+										onclick={() => copyToClipboard(note.content)}
 										class="rounded bg-gray-800 px-3 py-1 text-white transition-colors hover:bg-gray-700"
 										title="Copy note"
 									>
@@ -97,7 +97,7 @@
 									</button>
 
 									<button
-										on:click={() => downloadNote(note.content, i)}
+										onclick={() => downloadNote(note.content, i)}
 										class="rounded bg-black px-3 py-1 text-white transition-colors hover:bg-gray-800"
 										title="Download note"
 									>
@@ -105,7 +105,7 @@
 									</button>
 
 									<button
-										on:click={() => notes.deleteNote(note.id)}
+										onclick={() => notes.deleteNote(note.id)}
 										class="rounded bg-red-600 px-3 py-1 text-white transition-colors hover:bg-red-700"
 										title="Delete note"
 									>

@@ -1,11 +1,9 @@
 <script>
 	import { fly, fade } from 'svelte/transition';
 
-	export let title = 'Window';
-	export let isLocked = true;
-	export let isFullscreen = false;
+	let { title = 'Window', isLocked = $bindable(true), isFullscreen = $bindable(false), children, onclose = () => {} } = $props();
 
-	let isClosed = false;
+	let isClosed = $state(false);
 
 	function toggleFullscreen() {
 		isFullscreen = !isFullscreen;
@@ -13,12 +11,8 @@
 
 	function closeWindow() {
 		isClosed = true;
-		// Dispatch event untuk parent
-		dispatch('close');
+		if (onclose) onclose();
 	}
-
-	import { createEventDispatcher } from 'svelte';
-	const dispatch = createEventDispatcher();
 </script>
 
 {#if !isClosed}
@@ -37,7 +31,7 @@
 				<!-- Lock Button -->
 				<button
 					class="rounded p-1 transition-colors hover:bg-gray-700"
-					on:click={() => (isLocked = !isLocked)}
+					onclick={() => (isLocked = !isLocked)}
 					title={isLocked ? 'Unlock window' : 'Lock window'}
 				>
 					{#if isLocked}
@@ -50,7 +44,7 @@
 				<!-- Fullscreen Button -->
 				<button
 					class="rounded p-1 transition-colors hover:bg-gray-700"
-					on:click={toggleFullscreen}
+					onclick={toggleFullscreen}
 					title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
 				>
 					{#if isFullscreen}
@@ -63,7 +57,7 @@
 				<!-- Close Button -->
 				<button
 					class="rounded p-1 transition-colors hover:bg-red-600"
-					on:click={closeWindow}
+					onclick={closeWindow}
 					title="Close window"
 				>
 					✕
@@ -73,7 +67,7 @@
 
 		<!-- Window Content -->
 		<div class="flex-1 overflow-auto p-4">
-			<slot />
+			{@render children?.()}
 		</div>
 	</div>
 {/if}

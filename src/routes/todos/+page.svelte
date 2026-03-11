@@ -29,13 +29,13 @@
 				<input
 					type="text"
 					bind:value={newTodoText}
-					on:keydown={handleKeyPress}
+					onkeydown={handleKeyPress}
 					placeholder="What needs to be done? (Press Enter to save)"
 					class="flex-1 rounded-lg border border-gray-300 bg-surface-950 p-3 focus:border-transparent focus:ring-2 focus:ring-black"
 				/>
 
 				<button
-					on:click={addTodo}
+					onclick={addTodo}
 					class="px-6 py-3 transition-colors
                  disabled:cursor-not-allowed disabled:opacity-50"
 					disabled={!newTodoText.trim()}
@@ -70,7 +70,7 @@
 			<div class="mb-4 flex items-center justify-between">
 				<h3 class="text-xl font-semibold">Your Tasks ({todos.value.length})</h3>
 				{#if todos.value.filter((t) => t.completed).length > 0}
-					<button on:click={() => todos.clearCompleted()} class="px-4 py-2">
+					<button onclick={() => todos.clearCompleted()} class="px-4 py-2">
 						Clear Completed
 					</button>
 				{/if}
@@ -93,7 +93,7 @@
 							<input
 								type="checkbox"
 								checked={todo.completed}
-								on:change={() => todos.toggleTodo(todo.id)}
+								onchange={() => todos.toggleTodo(todo.id)}
 								class="h-5 w-5"
 							/>
 
@@ -109,7 +109,7 @@
 
 							<!-- Delete Button -->
 							<button
-								on:click={() => todos.deleteTodo(todo.id)}
+								onclick={() => todos.deleteTodo(todo.id)}
 								class="p-2 text-gray-400 transition-colors hover:text-red-600"
 								title="Delete task"
 							>
