@@ -71,17 +71,17 @@
     {isOpen ? 'md:w-64' : 'md:w-20'}
   "
 >
-	<!-- Header (w-full for normal, w-[5rem] equivalent for collapsed to match w-20 = 80px) -->
-	<div class="flex h-16 items-center border-b border-gray-800 {isOpen ? 'justify-between px-4' : 'justify-center'}">
+	<!-- Header -->
+	<div class="flex h-16 items-center border-b border-gray-800 {isOpen ? 'justify-between px-4' : 'justify-center'} transition-all duration-300">
 		<span
 			class="overflow-hidden text-xl font-bold whitespace-nowrap transition-all duration-300
-      {isOpen ? 'w-auto opacity-100' : 'md:w-0 md:opacity-0'}"
+      {isOpen ? 'w-auto opacity-100' : 'w-0 opacity-0'}"
 		>
 			Foocus
 		</span>
 
 		<button
-			class="hidden rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white md:flex"
+			class="hidden shrink-0 rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white md:flex {isOpen ? '' : 'absolute'}"
 			onclick={() => (isOpen = !isOpen)}
 			aria-label={isOpen ? 'Collapse sidebar' : 'Expand sidebar'}
 		>
@@ -98,7 +98,7 @@
 	</div>
 
 	<nav class="flex-1 overflow-x-hidden overflow-y-auto py-4">
-		<ul class="space-y-2 {isOpen ? 'px-2' : 'px-3'}">
+		<ul class="space-y-2 px-3 transition-all duration-300">
 			{#each menuItems as item}
 				{@const active = isActive(item.href)}
 				<li>
@@ -106,20 +106,20 @@
 						href={item.href}
 						onclick={handleLinkClick}
 						class="
-              group relative flex items-center rounded-lg transition-all duration-200
+              group relative flex items-center rounded-lg transition-all duration-300
               {isOpen ? 'px-3 py-3' : 'justify-center p-3'}
               {active
 							? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
 							: 'text-gray-400 hover:bg-gray-900 hover:text-white'}
             "
 					>
-						<div class="flex h-6 w-6 shrink-0 items-center justify-center">
+						<div class="flex h-6 w-6 shrink-0 items-center justify-center transition-transform duration-300 group-hover:scale-110">
 							<item.icon size={22} />
 						</div>
 
 						<span
-							class="ml-3 overflow-hidden font-medium whitespace-nowrap transition-all duration-300
-              {isOpen ? 'w-auto opacity-100' : 'md:ml-0 md:w-0 md:opacity-0'}
+							class="overflow-hidden font-medium whitespace-nowrap transition-all duration-300
+              {isOpen ? 'ml-3 w-auto opacity-100' : 'ml-0 w-0 opacity-0'}
             "
 						>
 							{item.name}
@@ -131,7 +131,7 @@
                 pointer-events-none absolute top-1/2 left-full z-50 ml-4 hidden
                 -translate-y-1/2 rounded border border-gray-700 bg-gray-800 px-2
                 py-1 text-xs
-                whitespace-nowrap text-white opacity-0 shadow-xl transition-opacity group-hover:opacity-100 md:block
+                whitespace-nowrap text-white opacity-0 shadow-xl transition-all duration-200 group-hover:opacity-100 md:block
               "
 							>
 								{item.name}
