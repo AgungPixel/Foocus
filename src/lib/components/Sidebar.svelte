@@ -71,7 +71,8 @@
     {isOpen ? 'md:w-64' : 'md:w-20'}
   "
 >
-	<div class="flex h-16 items-center justify-between border-b border-gray-800 px-4">
+	<!-- Header (w-full for normal, w-[5rem] equivalent for collapsed to match w-20 = 80px) -->
+	<div class="flex h-16 items-center border-b border-gray-800 {isOpen ? 'justify-between px-4' : 'justify-center'}">
 		<span
 			class="overflow-hidden text-xl font-bold whitespace-nowrap transition-all duration-300
       {isOpen ? 'w-auto opacity-100' : 'md:w-0 md:opacity-0'}"
@@ -97,7 +98,7 @@
 	</div>
 
 	<nav class="flex-1 overflow-x-hidden overflow-y-auto py-4">
-		<ul class="space-y-2 px-2">
+		<ul class="space-y-2 {isOpen ? 'px-2' : 'px-3'}">
 			{#each menuItems as item}
 				{@const active = isActive(item.href)}
 				<li>
@@ -105,7 +106,8 @@
 						href={item.href}
 						onclick={handleLinkClick}
 						class="
-              group relative flex items-center rounded-lg px-2 py-2.5 transition-all duration-200
+              group relative flex items-center rounded-lg transition-all duration-200
+              {isOpen ? 'px-3 py-3' : 'justify-center p-3'}
               {active
 							? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
 							: 'text-gray-400 hover:bg-gray-900 hover:text-white'}
