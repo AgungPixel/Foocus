@@ -32,7 +32,7 @@
 	}
 </script>
 
-<WindowFrame title="Notes Manager" isLocked={true}>
+<WindowFrame title="Notes Manager">
 	<div class="space-y-6">
 		<!-- Add New Note -->
 		<div class="rounded-lg border border-surface-950 bg-surface-950 p-6 shadow">

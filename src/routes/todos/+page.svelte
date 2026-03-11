@@ -21,7 +21,7 @@
 	}
 </script>
 
-<WindowFrame title="To-Do List Manager" isLocked={true}>
+<WindowFrame title="To-Do List Manager">
 	<div class="space-y-6">
 		<!-- Add New Todo -->
 		<div>
