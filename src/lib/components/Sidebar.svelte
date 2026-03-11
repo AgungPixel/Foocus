@@ -105,7 +105,7 @@
 						href={item.href}
 						onclick={handleLinkClick}
 						class="
-              group relative flex items-center rounded-lg px-3 py-3 transition-all duration-200
+              group relative flex items-center rounded-lg px-2 py-2.5 transition-all duration-200
               {active
 							? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
 							: 'text-gray-400 hover:bg-gray-900 hover:text-white'}
