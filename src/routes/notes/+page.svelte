@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import WindowFrame from '$lib/components/WindowFrame.svelte';
 	import { notes } from '$lib/stores/notesStore.svelte';
 	import { fade } from 'svelte/transition';
@@ -13,7 +13,7 @@
 		}
 	}
 
-	function downloadNote(content, index) {
+	function downloadNote(content: string, index: number) {
 		const blob = new Blob([content], { type: 'text/plain' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
@@ -25,7 +25,7 @@
 		URL.revokeObjectURL(url);
 	}
 
-	function copyToClipboard(text) {
+	function copyToClipboard(text: string) {
 		navigator.clipboard.writeText(text).then(() => {
 			alert('Note copied to clipboard!');
 		});
@@ -93,6 +93,7 @@
 										onclick={() => copyToClipboard(note.content)}
 										class="flex items-center gap-1 rounded bg-gray-800 px-3 py-1 text-white transition-colors hover:bg-gray-700"
 										title="Copy note"
+										aria-label="Copy note"
 									>
 										<Copy size={16} /> Copy
 									</button>
@@ -101,6 +102,7 @@
 										onclick={() => downloadNote(note.content, i)}
 										class="flex items-center gap-1 rounded bg-black px-3 py-1 text-white transition-colors hover:bg-gray-800"
 										title="Download note"
+										aria-label="Download note"
 									>
 										<Download size={16} /> Download
 									</button>
@@ -109,6 +111,7 @@
 										onclick={() => notes.deleteNote(note.id)}
 										class="flex items-center justify-center rounded bg-red-600 px-3 py-1 text-white transition-colors hover:bg-red-700"
 										title="Delete note"
+										aria-label="Delete note"
 									>
 										<Trash2 size={16} />
 									</button>

@@ -13,7 +13,7 @@
 		}
 	}
 
-	function handleKeyPress(e) {
+	function handleKeyPress(e: KeyboardEvent) {
 		if (e.key === 'Enter' && !e.shiftKey) {
 			e.preventDefault();
 			addTodo();
@@ -113,6 +113,7 @@
 								onclick={() => todos.deleteTodo(todo.id)}
 								class="flex items-center p-2 text-gray-400 transition-colors hover:text-red-600"
 								title="Delete task"
+								aria-label="Delete task"
 							>
 								<Trash2 size={20} />
 							</button>

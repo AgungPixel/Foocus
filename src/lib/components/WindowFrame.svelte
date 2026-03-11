@@ -34,6 +34,7 @@
 					class="rounded p-1 transition-colors hover:bg-gray-700"
 					onclick={() => (isLocked = !isLocked)}
 					title={isLocked ? 'Unlock window' : 'Lock window'}
+					aria-label={isLocked ? 'Unlock window' : 'Lock window'}
 				>
 					{#if isLocked}
 						<Lock size={16} />
@@ -47,6 +48,7 @@
 					class="rounded p-1 transition-colors hover:bg-gray-700"
 					onclick={toggleFullscreen}
 					title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+					aria-label={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
 				>
 					<Maximize size={16} />
 				</button>
@@ -56,6 +58,7 @@
 					class="rounded p-1 transition-colors hover:bg-red-600"
 					onclick={closeWindow}
 					title="Close window"
+					aria-label="Close window"
 				>
 					<X size={16} />
 				</button>
