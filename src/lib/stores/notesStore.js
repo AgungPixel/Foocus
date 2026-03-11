@@ -1,36 +1,46 @@
-import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
 function createNotesStore() {
-	const defaultValue = [];
-	const initialValue = browser
-		? JSON.parse(localStorage.getItem('simple-notes')) || defaultValue
-		: defaultValue;
+	let notesArray = $state([]);
 
-	const { subscribe, set, update } = writable(initialValue);
+	if (browser) {
+		try {
+			const stored = localStorage.getItem('simple-notes');
+			if (stored) {
+				notesArray = JSON.parse(stored);
+			}
+		} catch (e) {
+			console.error('Failed to parse notes from localStorage:', e);
+			localStorage.removeItem('simple-notes');
+		}
+	}
+
+	function saveStore(value) {
+		if (browser) {
+			localStorage.setItem('simple-notes', JSON.stringify(value));
+		}
+	}
 
 	return {
-		subscribe,
-		addNote: (content) =>
-			update((notes) => {
-				const newNote = {
-					id: Date.now(),
-					content,
-					createdAt: new Date().toISOString()
-				};
-				const newNotes = [...notes, newNote];
-				if (browser) localStorage.setItem('simple-notes', JSON.stringify(newNotes));
-				return newNotes;
-			}),
-		deleteNote: (id) =>
-			update((notes) => {
-				const newNotes = notes.filter((note) => note.id !== id);
-				if (browser) localStorage.setItem('simple-notes', JSON.stringify(newNotes));
-				return newNotes;
-			}),
+		get value() {
+			return notesArray;
+		},
+		addNote: (content) => {
+			const newNote = {
+				id: Date.now(),
+				content,
+				createdAt: new Date().toISOString()
+			};
+			notesArray = [...notesArray, newNote];
+			saveStore(notesArray);
+		},
+		deleteNote: (id) => {
+			notesArray = notesArray.filter((note) => note.id !== id);
+			saveStore(notesArray);
+		},
 		clearAll: () => {
+			notesArray = [];
 			if (browser) localStorage.removeItem('simple-notes');
-			set([]);
 		}
 	};
 }

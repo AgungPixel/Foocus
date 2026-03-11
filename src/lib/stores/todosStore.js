@@ -1,48 +1,54 @@
-import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
 function createTodosStore() {
-	const defaultValue = [];
-	const initialValue = browser
-		? JSON.parse(localStorage.getItem('simple-todos')) || defaultValue
-		: defaultValue;
+	let todosArray = $state([]);
 
-	const { subscribe, set, update } = writable(initialValue);
+	if (browser) {
+		try {
+			const stored = localStorage.getItem('simple-todos');
+			if (stored) {
+				todosArray = JSON.parse(stored);
+			}
+		} catch (e) {
+			console.error('Failed to parse todos from localStorage:', e);
+			localStorage.removeItem('simple-todos');
+		}
+	}
+
+	function saveStore(value) {
+		if (browser) {
+			localStorage.setItem('simple-todos', JSON.stringify(value));
+		}
+	}
 
 	return {
-		subscribe,
-		addTodo: (text) =>
-			update((todos) => {
-				const newTodo = {
-					id: Date.now(),
-					text,
-					completed: false,
-					createdAt: new Date().toISOString()
-				};
-				const newTodos = [...todos, newTodo];
-				if (browser) localStorage.setItem('simple-todos', JSON.stringify(newTodos));
-				return newTodos;
-			}),
-		toggleTodo: (id) =>
-			update((todos) => {
-				const newTodos = todos.map((todo) =>
-					todo.id === id ? { ...todo, completed: !todo.completed } : todo
-				);
-				if (browser) localStorage.setItem('simple-todos', JSON.stringify(newTodos));
-				return newTodos;
-			}),
-		deleteTodo: (id) =>
-			update((todos) => {
-				const newTodos = todos.filter((todo) => todo.id !== id);
-				if (browser) localStorage.setItem('simple-todos', JSON.stringify(newTodos));
-				return newTodos;
-			}),
-		clearCompleted: () =>
-			update((todos) => {
-				const newTodos = todos.filter((todo) => !todo.completed);
-				if (browser) localStorage.setItem('simple-todos', JSON.stringify(newTodos));
-				return newTodos;
-			})
+		get value() {
+			return todosArray;
+		},
+		addTodo: (text) => {
+			const newTodo = {
+				id: Date.now(),
+				text,
+				completed: false,
+				createdAt: new Date().toISOString()
+			};
+			todosArray = [...todosArray, newTodo];
+			saveStore(todosArray);
+		},
+		toggleTodo: (id) => {
+			todosArray = todosArray.map((todo) =>
+				todo.id === id ? { ...todo, completed: !todo.completed } : todo
+			);
+			saveStore(todosArray);
+		},
+		deleteTodo: (id) => {
+			todosArray = todosArray.filter((todo) => todo.id !== id);
+			saveStore(todosArray);
+		},
+		clearCompleted: () => {
+			todosArray = todosArray.filter((todo) => !todo.completed);
+			saveStore(todosArray);
+		}
 	};
 }
 
