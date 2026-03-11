@@ -1,7 +1,14 @@
 import { browser } from '$app/environment';
 
+export interface Todo {
+	id: number;
+	text: string;
+	completed: boolean;
+	createdAt: string;
+}
+
 function createTodosStore() {
-	let todosArray = $state([]);
+	let todosArray = $state<Todo[]>([]);
 
 	if (browser) {
 		try {
@@ -15,7 +22,7 @@ function createTodosStore() {
 		}
 	}
 
-	function saveStore(value) {
+	function saveStore(value: Todo[]) {
 		if (browser) {
 			localStorage.setItem('simple-todos', JSON.stringify(value));
 		}
@@ -25,8 +32,8 @@ function createTodosStore() {
 		get value() {
 			return todosArray;
 		},
-		addTodo: (text) => {
-			const newTodo = {
+		addTodo: (text: string) => {
+			const newTodo: Todo = {
 				id: Date.now(),
 				text,
 				completed: false,
@@ -35,13 +42,13 @@ function createTodosStore() {
 			todosArray = [...todosArray, newTodo];
 			saveStore(todosArray);
 		},
-		toggleTodo: (id) => {
+		toggleTodo: (id: number) => {
 			todosArray = todosArray.map((todo) =>
 				todo.id === id ? { ...todo, completed: !todo.completed } : todo
 			);
 			saveStore(todosArray);
 		},
-		deleteTodo: (id) => {
+		deleteTodo: (id: number) => {
 			todosArray = todosArray.filter((todo) => todo.id !== id);
 			saveStore(todosArray);
 		},

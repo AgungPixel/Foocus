@@ -1,7 +1,13 @@
 import { browser } from '$app/environment';
 
+export interface Note {
+	id: number;
+	content: string;
+	createdAt: string;
+}
+
 function createNotesStore() {
-	let notesArray = $state([]);
+	let notesArray = $state<Note[]>([]);
 
 	if (browser) {
 		try {
@@ -15,7 +21,7 @@ function createNotesStore() {
 		}
 	}
 
-	function saveStore(value) {
+	function saveStore(value: Note[]) {
 		if (browser) {
 			localStorage.setItem('simple-notes', JSON.stringify(value));
 		}
@@ -25,8 +31,8 @@ function createNotesStore() {
 		get value() {
 			return notesArray;
 		},
-		addNote: (content) => {
-			const newNote = {
+		addNote: (content: string) => {
+			const newNote: Note = {
 				id: Date.now(),
 				content,
 				createdAt: new Date().toISOString()
@@ -34,7 +40,7 @@ function createNotesStore() {
 			notesArray = [...notesArray, newNote];
 			saveStore(notesArray);
 		},
-		deleteNote: (id) => {
+		deleteNote: (id: number) => {
 			notesArray = notesArray.filter((note) => note.id !== id);
 			saveStore(notesArray);
 		},

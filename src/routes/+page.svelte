@@ -3,13 +3,8 @@
 	import { notes } from '$lib/stores/notesStore.svelte';
 	import { todos } from '$lib/stores/todosStore.svelte';
 
-	// Tambahkan interface
-	interface Todo {
-		id: number;
-		text: string;
-		completed: boolean;
-		createdAt: string;
-	}
+	import type { Note } from '$lib/stores/notesStore.svelte';
+	import type { Todo } from '$lib/stores/todosStore.svelte';
 </script>
 
 <WindowFrame title="Dashboard" isLocked={true}>
