@@ -5,10 +5,9 @@
 
 	interface Props {
 		isOpen?: boolean;
-		isMobile?: boolean; // Opsional, jika kamu mau pass dari parent
 	}
 
-	let { isOpen = $bindable(true), isMobile = false }: Props = $props();
+	let { isOpen = $bindable(true) }: Props = $props();
 
 	const menuItems = [
 		{ name: 'Home', href: '/', icon: House },
