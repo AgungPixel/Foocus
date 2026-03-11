@@ -1,7 +1,7 @@
 <script>
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { fade } from 'svelte/transition';
-	import { Menu } from '@lucide/svelte'; // Butuh icon menu untuk mobile trigger
+	import { Menu } from 'lucide-svelte'; // Butuh icon menu untuk mobile trigger
 	import './layout.css'; // Pastikan path css benar (biasanya app.css atau layout.css)
 
 	// Svelte 5: Ambil 'children' dari props untuk menggantikan <slot />

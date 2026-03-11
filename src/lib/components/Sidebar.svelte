@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
-	import { House, NotebookPen, ListTodo, ChevronLeft, ChevronRight, X } from '@lucide/svelte';
+	import { House, NotebookPen, ListTodo, ChevronLeft, ChevronRight, X } from 'lucide-svelte';
 
 	interface Props {
 		isOpen?: boolean;
