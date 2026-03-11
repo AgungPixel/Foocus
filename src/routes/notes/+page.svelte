@@ -1,6 +1,6 @@
 <script>
 	import WindowFrame from '$lib/components/WindowFrame.svelte';
-	import { notes } from '$lib/stores/notesStore';
+	import { notes } from '$lib/stores/notesStore.svelte';
 	import { fade } from 'svelte/transition';
 
 	let newNote = '';
@@ -60,8 +60,8 @@
 		<!-- Notes List -->
 		<div class="rounded-lg border border-surface-950 bg-surface-950 p-6 shadow">
 			<div class="mb-4 flex items-center justify-between">
-				<h3 class="text-xl font-semibold">Your Notes ({$notes.length})</h3>
-				{#if $notes.length > 0}
+				<h3 class="text-xl font-semibold">Your Notes ({notes.value.length})</h3>
+				{#if notes.value.length > 0}
 					<button
 						on:click={() => notes.clearAll()}
 						class="rounded-lg bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
@@ -71,11 +71,11 @@
 				{/if}
 			</div>
 
-			{#if $notes.length === 0}
+			{#if notes.value.length === 0}
 				<p class="py-8 text-center text-gray-500">No notes yet. Create your first note above!</p>
 			{:else}
 				<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-					{#each $notes as note, i}
+					{#each notes.value as note, i}
 						<div
 							class="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
 							in:fade={{ duration: 300 }}

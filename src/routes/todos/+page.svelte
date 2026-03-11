@@ -1,6 +1,6 @@
 <script lang="ts">
 	import WindowFrame from '$lib/components/WindowFrame.svelte';
-	import { todos } from '$lib/stores/todosStore';
+	import { todos } from '$lib/stores/todosStore.svelte';
 	import { fly, fade } from 'svelte/transition';
 
 	let newTodoText = '';
@@ -49,17 +49,17 @@
 		<div>
 			<div class="grid grid-cols-3 gap-4 text-center">
 				<div>
-					<p class="text-2xl font-bold">{$todos.length}</p>
+					<p class="text-2xl font-bold">{todos.value.length}</p>
 					<p class="text-sm">Total</p>
 				</div>
 				<div>
 					<p class="text-2xl font-bold text-green-600">
-						{$todos.filter((t) => t.completed).length}
+						{todos.value.filter((t) => t.completed).length}
 					</p>
 					<p class="text-sm">Completed</p>
 				</div>
 				<div>
-					<p class="text-2xl font-bold text-red-600">{$todos.filter((t) => !t.completed).length}</p>
+					<p class="text-2xl font-bold text-red-600">{todos.value.filter((t) => !t.completed).length}</p>
 					<p class="text-sm">Pending</p>
 				</div>
 			</div>
@@ -68,21 +68,21 @@
 		<!-- Todo List -->
 		<div>
 			<div class="mb-4 flex items-center justify-between">
-				<h3 class="text-xl font-semibold">Your Tasks ({$todos.length})</h3>
-				{#if $todos.filter((t) => t.completed).length > 0}
+				<h3 class="text-xl font-semibold">Your Tasks ({todos.value.length})</h3>
+				{#if todos.value.filter((t) => t.completed).length > 0}
 					<button on:click={() => todos.clearCompleted()} class="px-4 py-2">
 						Clear Completed
 					</button>
 				{/if}
 			</div>
 
-			{#if $todos.length === 0}
+			{#if todos.value.length === 0}
 				<div class="py-8 text-center" in:fade>
 					<p class="text-lg text-gray-500">🎉 No tasks yet! Add your first task above.</p>
 				</div>
 			{:else}
 				<div class="space-y-3">
-					{#each $todos as todo (todo.id)}
+					{#each todos.value as todo (todo.id)}
 						<div
 							class="flex items-center gap-4 p-4
                      {todo.completed ? '' : ''}"

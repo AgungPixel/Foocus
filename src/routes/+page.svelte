@@ -1,7 +1,7 @@
 <script lang="ts">
 	import WindowFrame from '$lib/components/WindowFrame.svelte';
-	import { notes } from '$lib/stores/notesStore';
-	import { todos } from '$lib/stores/todosStore';
+	import { notes } from '$lib/stores/notesStore.svelte';
+	import { todos } from '$lib/stores/todosStore.svelte';
 
 	// Tambahkan interface
 	interface Todo {
@@ -21,9 +21,9 @@
 			<div class="p-6">
 				<h3 class="mb-4 text-xl font-semibold">Statistics</h3>
 				<div class="space-y-2">
-					<p>Total Notes: {$notes.length}</p>
-					<p>Total Todos: {$todos.length}</p>
-					<p>Completed Todos: {$todos.filter((t: Todo) => t.completed).length}</p>
+					<p>Total Notes: {notes.value.length}</p>
+					<p>Total Todos: {todos.value.length}</p>
+					<p>Completed Todos: {todos.value.filter((t: Todo) => t.completed).length}</p>
 				</div>
 			</div>
 
@@ -50,11 +50,11 @@
 		<!-- Recent Notes -->
 		<div class="p-6">
 			<h3 class="mb-4 text-xl font-semibold">Recent Notes</h3>
-			{#if $notes.length === 0}
+			{#if notes.value.length === 0}
 				<p>No notes yet. Create your first note!</p>
 			{:else}
 				<div class="space-y-3">
-					{#each $notes.slice(-3).reverse() as note}
+					{#each notes.value.slice(-3).reverse() as note}
 						<div class="p-3">
 							<p class="truncate">{note.content.substring(0, 100)}...</p>
 							<p class="mt-1 text-sm">
