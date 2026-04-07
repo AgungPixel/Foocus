@@ -2,11 +2,18 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { fade } from 'svelte/transition';
 	import { Menu } from 'lucide-svelte';
+	import { onMount } from 'svelte';
 	import './layout.css';
 
 	let { children } = $props();
 
 	let sidebarOpen = $state(true);
+
+	onMount(() => {
+		if (window.innerWidth < 768) {
+			sidebarOpen = false;
+		}
+	});
 </script>
 
 <div class="min-h-screen bg-black text-gray-300 selection:bg-gray-800">

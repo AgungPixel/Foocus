@@ -11,16 +11,30 @@
 	import { Sparkles, NotebookPen, ListTodo } from 'lucide-svelte';
 	
 	let greeting = $state('Welcome');
+	let timeString = $state('');
 	
 	$effect(() => {
-		const hour = new Date().getHours();
-		if (hour < 12) greeting = 'Good Morning';
-		else if (hour < 18) greeting = 'Good Afternoon';
-		else greeting = 'Good Evening';
+		const updateTimeAndGreeting = () => {
+			const now = new Date();
+			const hour = now.getHours();
+			if (hour < 12) greeting = 'Good Morning';
+			else if (hour < 18) greeting = 'Good Afternoon';
+			else greeting = 'Good Evening';
+			
+			timeString = now.toLocaleTimeString(undefined, {
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit'
+			});
+		};
+		updateTimeAndGreeting();
+		const interval = setInterval(updateTimeAndGreeting, 1000);
+		
+		return () => clearInterval(interval);
 	});
 </script>
 
-<WindowFrame title="Dashboard">
+<WindowFrame title="">
 	<div class="space-y-8 pb-8">
 		<!-- Hero Section / Welcome Header -->
 		<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-900 via-purple-900 to-black p-8 shadow-2xl" in:fade={{ duration: 600 }}>
@@ -28,16 +42,28 @@
 			<div class="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-indigo-500/20 blur-3xl"></div>
 			
 			<div class="relative z-10">
-				<div class="flex items-center gap-3 text-purple-300 mb-2">
-					<Sparkles size={20} class="animate-pulse" />
-					<span class="font-medium tracking-wide uppercase text-sm">Welcome Back</span>
+				<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+					<div>
+						<div class="flex items-center gap-3 text-purple-300 mb-2">
+							<Sparkles size={20} class="animate-pulse" />
+							<span class="font-medium tracking-wide uppercase text-sm">Welcome Back</span>
+						</div>
+						<h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">
+							{greeting}, <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Creator.</span>
+						</h1>
+						<p class="text-indigo-200 mt-4 max-w-lg text-lg">
+							Get ready to conquer your day. You have <strong class="text-white">{todos.value.filter((t: Todo) => !t.completed).length} pending tasks</strong> dan <strong class="text-white">{notes.value.length} notes</strong> capturing your thoughts.
+						</p>
+					</div>
+
+					{#if timeString}
+						<div class="mt-6 md:mt-0 text-center md:text-right" in:fade>
+							<div class="text-4xl md:text-5xl font-bold text-white tracking-widest bg-black/30 backdrop-blur-sm rounded-xl py-3 px-6 shadow-inner border border-purple-500/30 inline-block font-mono">
+								{timeString}
+							</div>
+						</div>
+					{/if}
 				</div>
-				<h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2">
-					{greeting}, <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">Creator.</span>
-				</h1>
-				<p class="text-indigo-200 mt-4 max-w-lg text-lg">
-					Get ready to conquer your day. You have <strong class="text-white">{todos.value.filter((t: Todo) => !t.completed).length} pending tasks</strong> and <strong class="text-white">{notes.value.length} notes</strong> capturing your thoughts.
-				</p>
 			</div>
 		</div>
 
