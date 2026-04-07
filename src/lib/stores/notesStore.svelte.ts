@@ -19,6 +19,12 @@ function createNotesStore() {
 			console.error('Failed to parse notes from localStorage:', e);
 			localStorage.removeItem('simple-notes');
 		}
+		
+		window.addEventListener('storage', (e) => {
+			if (e.key === 'simple-notes' && e.newValue) {
+				notesArray = JSON.parse(e.newValue);
+			}
+		});
 	}
 
 	function saveStore(value: Note[]) {

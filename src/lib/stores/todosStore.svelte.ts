@@ -20,6 +20,12 @@ function createTodosStore() {
 			console.error('Failed to parse todos from localStorage:', e);
 			localStorage.removeItem('simple-todos');
 		}
+		
+		window.addEventListener('storage', (e) => {
+			if (e.key === 'simple-todos' && e.newValue) {
+				todosArray = JSON.parse(e.newValue);
+			}
+		});
 	}
 
 	function saveStore(value: Todo[]) {
