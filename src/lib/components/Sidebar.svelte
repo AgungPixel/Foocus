@@ -21,7 +21,7 @@
 	}
 
 	function handleLinkClick() {
-		if (window.innerWidth < 768) {
+		if (window.innerWidth < 1024) {
 			isOpen = false;
 		}
 	}
