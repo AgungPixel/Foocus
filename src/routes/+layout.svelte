@@ -2,12 +2,35 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { fade } from 'svelte/transition';
 	import { Menu } from 'lucide-svelte';
+	import { onMount, tick } from 'svelte';
 	import './layout.css';
 
 	let { children } = $props();
 
-	let sidebarOpen = $state(false);
+	let sidebarOpen = $state(true);
+	let mounted = $state(false);
+
+	onMount(async () => {
+		if (window.innerWidth < 1024) {
+			sidebarOpen = false;
+		}
+		await tick();
+		setTimeout(() => {
+			mounted = true;
+		}, 50); // delay before enabling CSS transitions
+	});
 </script>
+
+<svelte:head>
+	{#if !mounted}
+		<style>
+			*, *::before, *::after {
+				transition: none !important;
+				animation: none !important;
+			}
+		</style>
+	{/if}
+</svelte:head>
 
 <div class="min-h-screen bg-black text-gray-300 selection:bg-gray-800">
 	<Sidebar bind:isOpen={sidebarOpen} />
