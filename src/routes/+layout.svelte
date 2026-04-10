@@ -3,17 +3,16 @@
 	import { fade } from 'svelte/transition';
 	import { Menu } from 'lucide-svelte';
 	import { onMount, tick } from 'svelte';
+	import { browser } from '$app/environment';
 	import './layout.css';
 
 	let { children } = $props();
 
-	let sidebarOpen = $state(true);
+	// Server and mobile default to false. Desktop client defaults to true.
+	let sidebarOpen = $state(browser ? window.innerWidth >= 1024 : false);
 	let mounted = $state(false);
 
 	onMount(async () => {
-		if (window.innerWidth < 1024) {
-			sidebarOpen = false;
-		}
 		await tick();
 		setTimeout(() => {
 			mounted = true;
