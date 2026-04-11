@@ -1,10 +1,9 @@
 <script lang="ts">
-	import WindowFrame from '$lib/components/WindowFrame.svelte';
 	import { todos } from '$lib/stores/todosStore.svelte';
 	import { fly, fade } from 'svelte/transition';
-	import { Trash2, Plus, PartyPopper } from 'lucide-svelte';
+	import { Trash2, Plus } from 'lucide-svelte';
 
-	let newTodoText = '';
+	let newTodoText = $state('');
 
 	function addTodo() {
 		if (newTodoText.trim()) {
@@ -19,119 +18,98 @@
 			addTodo();
 		}
 	}
+
+	const pending = $derived(todos.value.filter((t) => !t.completed).length);
+	const done = $derived(todos.value.filter((t) => t.completed).length);
 </script>
 
-<WindowFrame title="To-Do List Manager">
-	<div class="space-y-6">
-		<!-- Add New Todo -->
-		<div>
-			<h3 class="mb-4 flex items-center text-xl font-semibold"><Plus size={24} class="mr-2" /> Add New Task</h3>
-			<div class="flex gap-3">
-				<input
-					type="text"
-					bind:value={newTodoText}
-					onkeydown={handleKeyPress}
-					placeholder="What needs to be done? (Press Enter to save)"
-					class="flex-1 rounded-lg border border-gray-300 bg-surface-950 p-3 focus:border-transparent focus:ring-2 focus:ring-black"
-				/>
-
-				<button
-					onclick={addTodo}
-					class="px-6 py-3 transition-colors
-                 disabled:cursor-not-allowed disabled:opacity-50"
-					disabled={!newTodoText.trim()}
-				>
-					Add
-				</button>
-			</div>
-		</div>
-
-		<!-- Stats -->
-		<div>
-			<div class="grid grid-cols-3 gap-4 text-center">
-				<div>
-					<p class="text-2xl font-bold">{todos.value.length}</p>
-					<p class="text-sm">Total</p>
-				</div>
-				<div>
-					<p class="text-2xl font-bold text-green-600">
-						{todos.value.filter((t) => t.completed).length}
-					</p>
-					<p class="text-sm">Completed</p>
-				</div>
-				<div>
-					<p class="text-2xl font-bold text-red-600">{todos.value.filter((t) => !t.completed).length}</p>
-					<p class="text-sm">Pending</p>
-				</div>
-			</div>
-		</div>
-
-		<!-- Todo List -->
-		<div>
-			<div class="mb-4 flex items-center justify-between">
-				<h3 class="text-xl font-semibold">Your Tasks ({todos.value.length})</h3>
-				{#if todos.value.filter((t) => t.completed).length > 0}
-					<button onclick={() => todos.clearCompleted()} class="px-4 py-2">
-						Clear Completed
-					</button>
-				{/if}
-			</div>
-
-			{#if todos.value.length === 0}
-				<div class="py-8 text-center" in:fade>
-					<p class="flex items-center justify-center text-lg text-gray-500"><PartyPopper size={24} class="mr-2" /> No tasks yet! Add your first task above.</p>
-				</div>
-			{:else}
-				<div class="space-y-3">
-					{#each todos.value as todo (todo.id)}
-						<div
-							class="flex items-center gap-4 p-4
-                     {todo.completed ? '' : ''}"
-							in:fly={{ y: 20, duration: 300 }}
-							out:fade
-						>
-							<!-- Checkbox -->
-							<input
-								type="checkbox"
-								checked={todo.completed}
-								onchange={() => todos.toggleTodo(todo.id)}
-								class="h-5 w-5"
-							/>
-
-							<!-- Todo Text -->
-							<div class="flex-1">
-								<p class={todo.completed ? 'text-gray-500 line-through' : ''}>
-									{todo.text}
-								</p>
-								<p class="mt-1 text-xs text-gray-400">
-									Added: {new Date(todo.createdAt).toLocaleDateString()}
-								</p>
-							</div>
-
-							<!-- Delete Button -->
-							<button
-								onclick={() => todos.deleteTodo(todo.id)}
-								class="flex items-center p-2 text-gray-400 transition-colors hover:text-red-600"
-								title="Delete task"
-								aria-label="Delete task"
-							>
-								<Trash2 size={20} />
-							</button>
-						</div>
-					{/each}
-				</div>
-			{/if}
-		</div>
-
-		<!-- Tips -->
-		<div>
-			<h4 class="mb-2 font-semibold">💡 Tips:</h4>
-			<ul class="space-y-1 text-sm">
-				<li>• Click checkbox to mark as complete</li>
-				<li>• Press <kbd class="px-2 py-1 text-xs">Enter</kbd> to quickly add tasks</li>
-				<li>• Tasks are automatically saved in your browser</li>
-				<li>• Use "Clear Completed" to remove finished tasks</li>
-			</ul>
-		</div>
+<div class="space-y-6 pb-10" in:fade={{ duration: 300 }}>
+	<!-- Header -->
+	<div class="border-b pb-6" style="border-color: #1a1a1a">
+		<h1 class="text-2xl font-bold text-white">Tasks</h1>
+		<p class="mt-1 text-sm" style="color: #A1A1A1">{pending} pending · {done} done</p>
 	</div>
-</WindowFrame>
+
+	<!-- Add input -->
+	<div class="flex gap-3">
+		<input
+			type="text"
+			bind:value={newTodoText}
+			onkeydown={handleKeyPress}
+			placeholder="Add a task…"
+			class="flex-1 rounded-xl px-4 py-3 text-sm text-white placeholder-[#A1A1A1] outline-none transition-all"
+			style="background: #0A0A0A; border: 1px solid #1a1a1a;"
+			onfocus={(e) => (e.currentTarget.style.borderColor = '#CCFF00')}
+			onblur={(e) => (e.currentTarget.style.borderColor = '#1a1a1a')}
+		/>
+		<button
+			onclick={addTodo}
+			disabled={!newTodoText.trim()}
+			class="flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold transition-opacity disabled:opacity-30"
+			style="background: #CCFF00; color: #000000;"
+		>
+			<Plus size={16} /> Add
+		</button>
+	</div>
+
+	<!-- List -->
+	{#if todos.value.length === 0}
+		<div class="py-16 text-center" in:fade>
+			<p class="text-sm" style="color: #A1A1A1">No tasks yet. Add one above.</p>
+		</div>
+	{:else}
+		<div class="space-y-2">
+			{#each todos.value as todo (todo.id)}
+				<div
+					class="flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-150"
+					style="background: #0A0A0A; border: 1px solid #1a1a1a;"
+					in:fly={{ y: 8, duration: 200 }}
+					out:fade={{ duration: 150 }}
+				>
+					<!-- Custom checkbox -->
+					<button
+						onclick={() => todos.toggleTodo(todo.id)}
+						class="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-all duration-150"
+						style={todo.completed
+							? 'background: #CCFF00; border-color: #CCFF00;'
+							: 'background: transparent; border-color: #333;'}
+						aria-label="Toggle task"
+					>
+						{#if todo.completed}
+							<svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+								<path d="M1 4L3.5 6.5L9 1" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+							</svg>
+						{/if}
+					</button>
+
+					<span class="flex-1 text-sm transition-all" class:line-through={todo.completed} style={todo.completed ? 'color: #A1A1A1' : 'color: #fff'}>
+						{todo.text}
+					</span>
+
+					<button
+						onclick={() => todos.deleteTodo(todo.id)}
+						class="rounded-lg p-1.5 transition-colors"
+						style="color: #A1A1A1"
+						onmouseenter={(e) => (e.currentTarget.style.color = '#ff4444')}
+						onmouseleave={(e) => (e.currentTarget.style.color = '#A1A1A1')}
+						aria-label="Delete task"
+					>
+						<Trash2 size={15} />
+					</button>
+				</div>
+			{/each}
+		</div>
+
+		{#if done > 0}
+			<button
+				onclick={() => todos.clearCompleted()}
+				class="text-xs transition-colors"
+				style="color: #A1A1A1"
+				onmouseenter={(e) => (e.currentTarget.style.color = '#CCFF00')}
+				onmouseleave={(e) => (e.currentTarget.style.color = '#A1A1A1')}
+			>
+				Clear {done} completed
+			</button>
+		{/if}
+	{/if}
+</div>

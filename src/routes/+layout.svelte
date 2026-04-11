@@ -1,61 +1,66 @@
-<script>
+<script lang="ts">
 	import Sidebar from '$lib/components/Sidebar.svelte';
-	import { fade } from 'svelte/transition';
-	import { Menu } from 'lucide-svelte';
+	import { page } from '$app/stores';
 	import { onMount, tick } from 'svelte';
 	import { browser } from '$app/environment';
+	import { Menu } from 'lucide-svelte';
 	import './layout.css';
 
 	let { children } = $props();
 
-	// Server and mobile default to false. Desktop client defaults to true.
 	let sidebarOpen = $state(browser ? window.innerWidth >= 1024 : false);
 	let mounted = $state(false);
 
 	onMount(async () => {
 		await tick();
-		setTimeout(() => {
-			mounted = true;
-		}, 50); // delay before enabling CSS transitions
+		setTimeout(() => { mounted = true; }, 50);
 	});
+
+	// Page title map
+	const titles: Record<string, string> = {
+		'/': 'Dashboard',
+		'/notes': 'Notes',
+		'/todos': 'Tasks',
+	};
+	const pageTitle = $derived(titles[$page.url.pathname] ?? 'Foocus');
 </script>
 
 <svelte:head>
 	{#if !mounted}
-		<style>
-			*, *::before, *::after {
-				transition: none !important;
-				animation: none !important;
-			}
-		</style>
+		<style>*, *::before, *::after { transition: none !important; animation: none !important; }</style>
 	{/if}
 </svelte:head>
 
-<div class="min-h-screen bg-black text-gray-300 selection:bg-gray-800">
+<div class="min-h-screen" style="background: #000000; color: #ffffff;">
 	<Sidebar bind:isOpen={sidebarOpen} />
 
-	<main
-		class="
-    transition-all duration-300 ease-in-out
-    {sidebarOpen ? 'md:ml-64' : 'md:ml-20'}
-  "
+	<div
+		class="flex min-h-screen flex-col transition-all duration-300 ease-in-out"
+		style="{sidebarOpen ? 'margin-left: 256px' : 'margin-left: 80px'}"
+		class:!ml-0={!mounted}
 	>
-		<!-- Mobile Header -->
-		<div
-			class="sticky top-0 z-30 flex items-center border-b border-gray-800 bg-black/80 p-4 backdrop-blur-md md:hidden"
+		<!-- ─── Top Header ─── -->
+		<header
+			class="sticky top-0 z-30 flex h-12 shrink-0 items-center gap-3 px-5"
+			style="background: #000000; border-bottom: 1px solid #1a1a1a;"
 		>
+			<!-- Hamburger (mobile) -->
 			<button
-				onclick={() => (sidebarOpen = true)}
-				class="-ml-2 rounded p-2 text-gray-400 hover:text-white transition-colors"
-				aria-label="Open menu"
+				onclick={() => (sidebarOpen = !sidebarOpen)}
+				class="flex h-7 w-7 items-center justify-center rounded transition-colors hover:bg-white/5 lg:hidden"
+				aria-label="Toggle menu"
+				style="color: #A1A1A1;"
 			>
-				<Menu size={24} />
+				<Menu size={16} />
 			</button>
-			<span class="ml-3 text-lg font-medium text-white">Foocus</span>
-		</div>
 
-		<div class="p-6 md:p-10" in:fade={{ duration: 300 }}>
+			<!-- Page title / breadcrumb -->
+			<span class="text-sm font-medium" style="color: #A1A1A1;">{pageTitle}</span>
+		</header>
+
+		<!-- ─── Page Content ─── -->
+		<main class="flex-1 p-6 md:p-8">
 			{@render children()}
-		</div>
-	</main>
+		</main>
+	</div>
 </div>

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import WindowFrame from '$lib/components/WindowFrame.svelte';
 	import { notes } from '$lib/stores/notesStore.svelte';
 	import { fade } from 'svelte/transition';
-	import { Copy, Download, Trash2 } from 'lucide-svelte';
+	import { Copy, Download, Trash2, Plus } from 'lucide-svelte';
 
-	let newNote = '';
+	let newNote = $state('');
+	let copied = $state<number | null>(null);
 
 	function addNote() {
 		if (newNote.trim()) {
@@ -25,102 +25,112 @@
 		URL.revokeObjectURL(url);
 	}
 
-	function copyToClipboard(text: string) {
-		navigator.clipboard.writeText(text).then(() => {
-			alert('Note copied to clipboard!');
-		});
+	async function copyToClipboard(text: string, id: number) {
+		await navigator.clipboard.writeText(text);
+		copied = id;
+		setTimeout(() => (copied = null), 1500);
 	}
 </script>
 
-<WindowFrame title="Notes Manager">
-	<div class="space-y-6">
-		<!-- Add New Note -->
-		<div class="rounded-lg border border-surface-950 bg-surface-950 p-6 shadow">
-			<h3 class="mb-4 text-xl font-semibold">Create New Note</h3>
-			<div class="space-y-4">
-				<textarea
-					bind:value={newNote}
-					placeholder="Type your note here..."
-					class="w-full rounded-lg border border-surface-950 bg-surface-950 p-3 focus:border-transparent focus:ring-2 focus:ring-black"
-					rows="4"
-				></textarea>
+<div class="space-y-6 pb-10" in:fade={{ duration: 300 }}>
+	<!-- Header -->
+	<div class="border-b pb-6" style="border-color: #1a1a1a">
+		<h1 class="text-2xl font-bold text-white">Notes</h1>
+		<p class="mt-1 text-sm" style="color: #A1A1A1">{notes.value.length} note{notes.value.length !== 1 ? 's' : ''}</p>
+	</div>
 
-				<div class="flex justify-end">
-					<button
-						onclick={addNote}
-						class="rounded-lg bg-black px-6 py-2 text-white transition-colors hover:bg-gray-800
-                   disabled:cursor-not-allowed disabled:opacity-50"
-						disabled={!newNote.trim()}
-					>
-						Save Note
-					</button>
-				</div>
-			</div>
-		</div>
-
-		<!-- Notes List -->
-		<div class="rounded-lg border border-surface-950 bg-surface-950 p-6 shadow">
-			<div class="mb-4 flex items-center justify-between">
-				<h3 class="text-xl font-semibold">Your Notes ({notes.value.length})</h3>
-				{#if notes.value.length > 0}
-					<button
-						onclick={() => notes.clearAll()}
-						class="rounded-lg bg-red-600 px-4 py-2 text-white transition-colors hover:bg-red-700"
-					>
-						Clear All
-					</button>
-				{/if}
-			</div>
-
-			{#if notes.value.length === 0}
-				<p class="py-8 text-center text-gray-500">No notes yet. Create your first note above!</p>
-			{:else}
-				<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-					{#each notes.value as note, i}
-						<div
-							class="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
-							in:fade={{ duration: 300 }}
-						>
-							<p class="mb-3 whitespace-pre-wrap">{note.content}</p>
-
-							<div class="mt-4 flex items-center justify-between border-t border-gray-100 pt-4">
-								<span class="text-sm text-gray-500">
-									{new Date(note.createdAt).toLocaleDateString()}
-								</span>
-
-								<div class="flex space-x-2">
-									<button
-										onclick={() => copyToClipboard(note.content)}
-										class="flex items-center gap-1 rounded bg-gray-800 px-3 py-1 text-white transition-colors hover:bg-gray-700"
-										title="Copy note"
-										aria-label="Copy note"
-									>
-										<Copy size={16} /> Copy
-									</button>
-
-									<button
-										onclick={() => downloadNote(note.content, i)}
-										class="flex items-center gap-1 rounded bg-black px-3 py-1 text-white transition-colors hover:bg-gray-800"
-										title="Download note"
-										aria-label="Download note"
-									>
-										<Download size={16} /> Download
-									</button>
-
-									<button
-										onclick={() => notes.deleteNote(note.id)}
-										class="flex items-center justify-center rounded bg-red-600 px-3 py-1 text-white transition-colors hover:bg-red-700"
-										title="Delete note"
-										aria-label="Delete note"
-									>
-										<Trash2 size={16} />
-									</button>
-								</div>
-							</div>
-						</div>
-					{/each}
-				</div>
-			{/if}
+	<!-- Input -->
+	<div class="space-y-3">
+		<textarea
+			bind:value={newNote}
+			placeholder="Write something…"
+			rows={3}
+			class="w-full resize-none rounded-xl px-4 py-3 text-sm text-white placeholder-[#A1A1A1] outline-none transition-all"
+			style="background: #0A0A0A; border: 1px solid #1a1a1a;"
+			onfocus={(e) => (e.currentTarget.style.borderColor = '#CCFF00')}
+			onblur={(e) => (e.currentTarget.style.borderColor = '#1a1a1a')}
+		></textarea>
+		<div class="flex justify-end">
+			<button
+				onclick={addNote}
+				disabled={!newNote.trim()}
+				class="flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-opacity disabled:opacity-30"
+				style="background: #CCFF00; color: #000000;"
+			>
+				<Plus size={15} /> Save Note
+			</button>
 		</div>
 	</div>
-</WindowFrame>
+
+	<!-- Notes list -->
+	{#if notes.value.length === 0}
+		<div class="py-16 text-center" in:fade>
+			<p class="text-sm" style="color: #A1A1A1">No notes yet.</p>
+		</div>
+	{:else}
+		<div class="space-y-3">
+			<!-- Clear All -->
+			<div class="flex justify-end">
+				<button
+					onclick={() => notes.clearAll()}
+					class="text-xs transition-colors"
+					style="color: #A1A1A1"
+					onmouseenter={(e) => (e.currentTarget.style.color = '#ff4444')}
+					onmouseleave={(e) => (e.currentTarget.style.color = '#A1A1A1')}
+				>
+					Clear all
+				</button>
+			</div>
+
+			<div class="grid gap-3 sm:grid-cols-2">
+				{#each notes.value as note, i}
+					<div
+						class="flex flex-col rounded-xl p-4"
+						style="background: #0A0A0A; border: 1px solid #1a1a1a;"
+						in:fade={{ duration: 250 }}
+					>
+						<p class="flex-1 whitespace-pre-wrap text-sm leading-relaxed text-white">{note.content}</p>
+						<div class="mt-4 flex items-center justify-between border-t pt-3" style="border-color: #1a1a1a">
+							<span class="text-[11px]" style="color: #A1A1A1">
+								{new Date(note.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+							</span>
+							<div class="flex gap-1">
+								<button
+									onclick={() => copyToClipboard(note.content, note.id)}
+									class="rounded-lg p-1.5 text-xs transition-colors"
+									style={copied === note.id ? 'color: #CCFF00' : 'color: #A1A1A1'}
+									title="Copy"
+									aria-label="Copy note"
+								>
+									<Copy size={14} />
+								</button>
+								<button
+									onclick={() => downloadNote(note.content, i)}
+									class="rounded-lg p-1.5 transition-colors"
+									style="color: #A1A1A1"
+									onmouseenter={(e) => (e.currentTarget.style.color = '#CCFF00')}
+									onmouseleave={(e) => (e.currentTarget.style.color = '#A1A1A1')}
+									title="Download"
+									aria-label="Download note"
+								>
+									<Download size={14} />
+								</button>
+								<button
+									onclick={() => notes.deleteNote(note.id)}
+									class="rounded-lg p-1.5 transition-colors"
+									style="color: #A1A1A1"
+									onmouseenter={(e) => (e.currentTarget.style.color = '#ff4444')}
+									onmouseleave={(e) => (e.currentTarget.style.color = '#A1A1A1')}
+									title="Delete"
+									aria-label="Delete note"
+								>
+									<Trash2 size={14} />
+								</button>
+							</div>
+						</div>
+					</div>
+				{/each}
+			</div>
+		</div>
+	{/if}
+</div>
