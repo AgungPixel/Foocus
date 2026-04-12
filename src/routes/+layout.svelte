@@ -35,19 +35,18 @@
 	<Sidebar bind:isOpen={sidebarOpen} />
 
 	<div
-		class="flex min-h-screen flex-col transition-all duration-300 ease-in-out"
-		style="{sidebarOpen ? 'margin-left: 256px' : 'margin-left: 80px'}"
-		class:!ml-0={!mounted}
+		class="flex min-h-screen flex-col transition-all duration-300 ease-in-out
+			{sidebarOpen ? 'lg:ml-64' : 'lg:ml-20'}"
 	>
 		<!-- ─── Top Header ─── -->
 		<header
 			class="sticky top-0 z-30 flex h-12 shrink-0 items-center gap-3 px-5"
 			style="background: #000000; border-bottom: 1px solid #1a1a1a;"
 		>
-			<!-- Hamburger (mobile) -->
+			<!-- Hamburger — always visible -->
 			<button
 				onclick={() => (sidebarOpen = !sidebarOpen)}
-				class="flex h-7 w-7 items-center justify-center rounded transition-colors hover:bg-white/5 lg:hidden"
+				class="flex h-7 w-7 items-center justify-center rounded transition-colors hover:bg-white/5"
 				aria-label="Toggle menu"
 				style="color: #A1A1A1;"
 			>
