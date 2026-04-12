@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 	import { House, NotebookPen, ListTodo, PanelLeftClose, PanelLeftOpen, X } from 'lucide-svelte';
+	import { tooltip } from '$lib/actions/tooltip.js';
 
 	interface Props {
 		isOpen?: boolean;
@@ -102,11 +103,12 @@
 					<a
 						href={item.href}
 						onclick={handleLinkClick}
+						use:tooltip={{ label: item.name, disabled: isOpen }}
 						class="
-              group flex items-center rounded-md transition-all duration-300 px-4 py-2.5
+              flex items-center rounded-md transition-all duration-300 px-4 py-2.5
               {active
-							? 'bg-[#262626] text-white'
-							: 'text-[#a3a3a3] hover:bg-[#171717] hover:text-[#d4d4d4]'}
+								? 'bg-[#262626] text-white'
+								: 'text-[#a3a3a3] hover:bg-[#171717] hover:text-[#d4d4d4]'}
             "
 					>
 						<div class="flex shrink-0 items-center justify-center">
