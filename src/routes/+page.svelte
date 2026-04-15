@@ -29,25 +29,6 @@
 	<!-- ─── Nav Cards ─── -->
 	<div class="grid grid-cols-1 gap-3 sm:grid-cols-2" in:fly={{ y: 10, duration: 300, delay: 80 }}>
 		<a
-			href="/notes"
-			class="group flex items-center justify-between rounded-xl p-5 transition-all duration-200"
-			style="background: #0A0A0A; border: 1px solid #1a1a1a;"
-			onmouseenter={(e) => (e.currentTarget.style.borderColor = '#CCFF00')}
-			onmouseleave={(e) => (e.currentTarget.style.borderColor = '#1a1a1a')}
-		>
-			<div class="flex items-center gap-4">
-				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style="background: #111111;">
-					<NotebookPen size={18} style="color: #CCFF00" />
-				</div>
-				<div>
-					<p class="text-sm font-semibold text-white">My Notes</p>
-					<p class="text-xs" style="color: #A1A1A1">{notes.value.length} note{notes.value.length !== 1 ? 's' : ''}</p>
-				</div>
-			</div>
-			<ArrowUpRight size={16} style="color: #A1A1A1" class="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-		</a>
-
-		<a
 			href="/todos"
 			class="group flex items-center justify-between rounded-xl p-5 transition-all duration-200"
 			style="background: #0A0A0A; border: 1px solid #1a1a1a;"
@@ -61,6 +42,25 @@
 				<div>
 					<p class="text-sm font-semibold text-white">Task List</p>
 					<p class="text-xs" style="color: #A1A1A1">{pendingCount} pending</p>
+				</div>
+			</div>
+			<ArrowUpRight size={16} style="color: #A1A1A1" class="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+		</a>
+
+		<a
+			href="/notes"
+			class="group flex items-center justify-between rounded-xl p-5 transition-all duration-200"
+			style="background: #0A0A0A; border: 1px solid #1a1a1a;"
+			onmouseenter={(e) => (e.currentTarget.style.borderColor = '#CCFF00')}
+			onmouseleave={(e) => (e.currentTarget.style.borderColor = '#1a1a1a')}
+		>
+			<div class="flex items-center gap-4">
+				<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style="background: #111111;">
+					<NotebookPen size={18} style="color: #CCFF00" />
+				</div>
+				<div>
+					<p class="text-sm font-semibold text-white">My Notes</p>
+					<p class="text-xs" style="color: #A1A1A1">{notes.value.length} note{notes.value.length !== 1 ? 's' : ''}</p>
 				</div>
 			</div>
 			<ArrowUpRight size={16} style="color: #A1A1A1" class="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />

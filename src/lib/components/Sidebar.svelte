@@ -12,8 +12,8 @@
 
 	const menuItems = [
 		{ name: 'Dashboard', href: '/', icon: House },
-		{ name: 'My Notes', href: '/notes', icon: NotebookPen },
-		{ name: 'Task List', href: '/todos', icon: ListTodo }
+		{ name: 'Task List', href: '/todos', icon: ListTodo },
+		{ name: 'My Notes', href: '/notes', icon: NotebookPen }
 	];
 
 	function isActive(href: string): boolean {
