@@ -21,6 +21,24 @@
 
 	const pending = $derived(todos.value.filter((t) => !t.completed).length);
 	const done = $derived(todos.value.filter((t) => t.completed).length);
+
+	let nowTime = $state(Date.now());
+	$effect(() => {
+		const interval = setInterval(() => {
+			nowTime = Date.now();
+		}, 60000); // update ui every minute
+		return () => clearInterval(interval);
+	});
+
+	function formatTimeLeft(expiresAt: number | undefined) {
+		if (!expiresAt) return '';
+		const diff = expiresAt - nowTime;
+		if (diff <= 0) return 'soon';
+		const hours = Math.floor(diff / (1000 * 60 * 60));
+		const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+		if (hours > 0) return `${hours}h ${mins}m`;
+		return `${mins}m`;
+	}
 </script>
 
 <div class="space-y-6 pb-10" in:fade={{ duration: 300 }}>
@@ -60,43 +78,32 @@
 	{:else}
 		<div class="space-y-2">
 			{#each todos.value as todo (todo.id)}
-				<div
-					class="flex items-center gap-4 rounded-xl px-4 py-3 transition-all duration-150"
+				<button
+					onclick={() => (todo.completed ? todos.deleteTodo(todo.id) : todos.toggleTodo(todo.id))}
+					class="w-full flex flex-col items-start gap-1 rounded-xl px-5 py-4 transition-all duration-150 text-left cursor-pointer group"
 					style="background: #0A0A0A; border: 1px solid #1a1a1a;"
 					in:fly={{ y: 8, duration: 200 }}
 					out:fade={{ duration: 150 }}
+					onmouseenter={(e) => {
+						if (!todo.completed) e.currentTarget.style.borderColor = '#CCFF00';
+						else e.currentTarget.style.borderColor = '#ff4444';
+					}}
+					onmouseleave={(e) => (e.currentTarget.style.borderColor = '#1a1a1a')}
 				>
-					<!-- Custom checkbox -->
-					<button
-						onclick={() => todos.toggleTodo(todo.id)}
-						class="flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-all duration-150"
-						style={todo.completed
-							? 'background: #CCFF00; border-color: #CCFF00;'
-							: 'background: transparent; border-color: #333;'}
-						aria-label="Toggle task"
+					<span
+						class="text-sm transition-all duration-200"
+						class:line-through={todo.completed}
+						style={todo.completed ? 'color: #A1A1A1' : 'color: #fff'}
 					>
-						{#if todo.completed}
-							<svg width="10" height="8" viewBox="0 0 10 8" fill="none">
-								<path d="M1 4L3.5 6.5L9 1" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-							</svg>
-						{/if}
-					</button>
-
-					<span class="flex-1 text-sm transition-all" class:line-through={todo.completed} style={todo.completed ? 'color: #A1A1A1' : 'color: #fff'}>
 						{todo.text}
 					</span>
-
-					<button
-						onclick={() => todos.deleteTodo(todo.id)}
-						class="rounded-lg p-1.5 transition-colors"
-						style="color: #A1A1A1"
-						onmouseenter={(e) => (e.currentTarget.style.color = '#ff4444')}
-						onmouseleave={(e) => (e.currentTarget.style.color = '#A1A1A1')}
-						aria-label="Delete task"
-					>
-						<Trash2 size={15} />
-					</button>
-				</div>
+					
+					{#if todo.completed && todo.expiresAt}
+						<span class="text-[11px] font-medium transition-colors" style="color: #A1A1A1" class:group-hover:text-[#ff4444]={true}>
+							Click again to delete (Auto-clears in {formatTimeLeft(todo.expiresAt)})
+						</span>
+					{/if}
+				</button>
 			{/each}
 		</div>
 

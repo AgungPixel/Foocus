@@ -5,6 +5,7 @@ export interface Todo {
 	text: string;
 	completed: boolean;
 	createdAt: string;
+	expiresAt?: number;
 }
 
 function createTodosStore() {
@@ -14,7 +15,13 @@ function createTodosStore() {
 		try {
 			const stored = localStorage.getItem('simple-todos');
 			if (stored) {
-				todosArray = JSON.parse(stored);
+				const now = Date.now();
+				const parsed = JSON.parse(stored);
+				// Filter out expired items immediately on load
+				todosArray = parsed.filter((t: Todo) => !(t.completed && t.expiresAt && now >= t.expiresAt));
+				if (parsed.length !== todosArray.length) {
+					localStorage.setItem('simple-todos', JSON.stringify(todosArray));
+				}
 			}
 		} catch (e) {
 			console.error('Failed to parse todos from localStorage:', e);
@@ -26,6 +33,22 @@ function createTodosStore() {
 				todosArray = JSON.parse(e.newValue);
 			}
 		});
+
+		// Auto-clear routine: check every 1 minute if any completed task has expired (24h)
+		setInterval(() => {
+			const now = Date.now();
+			let changed = false;
+			todosArray = todosArray.filter(t => {
+				if (t.completed && t.expiresAt && now >= t.expiresAt) {
+					changed = true;
+					return false;
+				}
+				return true;
+			});
+			if (changed) {
+				localStorage.setItem('simple-todos', JSON.stringify(todosArray));
+			}
+		}, 60000);
 	}
 
 	function saveStore(value: Todo[]) {
@@ -49,9 +72,17 @@ function createTodosStore() {
 			saveStore(todosArray);
 		},
 		toggleTodo: (id: number) => {
-			todosArray = todosArray.map((todo) =>
-				todo.id === id ? { ...todo, completed: !todo.completed } : todo
-			);
+			todosArray = todosArray.map((todo) => {
+				if (todo.id === id) {
+					const completed = !todo.completed;
+					return { 
+						...todo, 
+						completed,
+						expiresAt: completed ? Date.now() + 24 * 60 * 60 * 1000 : undefined 
+					};
+				}
+				return todo;
+			});
 			saveStore(todosArray);
 		},
 		deleteTodo: (id: number) => {
