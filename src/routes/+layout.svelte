@@ -34,7 +34,7 @@
 <div class="min-h-screen" style="background: #000000; color: #ffffff;">
 	<Sidebar bind:isOpen={sidebarOpen} />
 
-	<div class="flex min-h-screen flex-col transition-all duration-300 ease-in-out {sidebarOpen ? 'lg:ml-64' : 'lg:ml-0'}">
+	<div class="flex min-h-screen flex-col transition-all duration-300 ease-in-out {sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'}">
 		<!-- ─── Top Header ─── -->
 		<header
 			class="sticky top-0 z-30 flex h-12 shrink-0 items-center gap-3 px-5"
