@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { todos } from '$lib/stores/todosStore.svelte';
 	import { fly, fade } from 'svelte/transition';
-	import { Trash2, Plus } from 'lucide-svelte';
+	import { Trash2, Plus, Circle, CheckCircle2 } from 'lucide-svelte';
 
 	let newTodoText = $state('');
 
@@ -90,16 +90,29 @@
 					}}
 					onmouseleave={(e) => (e.currentTarget.style.borderColor = '#1a1a1a')}
 				>
-					<span
-						class="text-sm transition-all duration-200"
-						class:line-through={todo.completed}
-						style={todo.completed ? 'color: #A1A1A1' : 'color: #fff'}
-					>
-						{todo.text}
-					</span>
+					<div class="flex w-full items-center justify-between gap-4">
+						<span
+							class="text-sm transition-all duration-200"
+							class:line-through={todo.completed}
+							style={todo.completed ? 'color: #A1A1A1' : 'color: #fff'}
+						>
+							{todo.text}
+						</span>
+						
+						<!-- Dynamic Status Icon -->
+						<div class="flex h-5 w-5 shrink-0 items-center justify-center transition-colors duration-200">
+							{#if todo.completed}
+								<CheckCircle2 size={16} strokeWidth={2.5} class="block group-hover:hidden text-[#CCFF00] opacity-80" />
+								<Trash2 size={16} strokeWidth={2} class="hidden group-hover:block text-[#ff4444]" />
+							{:else}
+								<Circle size={16} strokeWidth={2} class="block group-hover:hidden text-[#333]" />
+								<CheckCircle2 size={16} strokeWidth={2.5} class="hidden group-hover:block text-[#CCFF00]" />
+							{/if}
+						</div>
+					</div>
 					
 					{#if todo.completed && todo.expiresAt}
-						<span class="text-[11px] font-medium transition-colors" style="color: #A1A1A1" class:group-hover:text-[#ff4444]={true}>
+						<span class="text-[11px] font-medium transition-colors mt-0.5" style="color: #A1A1A1" class:group-hover:text-[#ff4444]={true}>
 							Click again to delete (Auto-clears in {formatTimeLeft(todo.expiresAt)})
 						</span>
 					{/if}
