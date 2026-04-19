@@ -65,12 +65,8 @@
 	<!-- Header Logo Area -->
 	<div class="flex h-12 shrink-0 items-center justify-between px-5 border-b border-[#1a1a1a] overflow-hidden whitespace-nowrap">
 		<a href="/" class="flex items-center" onclick={handleLinkClick}>
-			<div class="flex h-6 w-6 shrink-0 items-center justify-center bg-white text-black rounded-sm">
-				<span class="font-bold text-sm leading-none mt-[1px]">F</span>
-			</div>
-			
 			<div class="grid transition-[grid-template-columns] duration-300 ease-in-out {isOpen ? 'grid-cols-[1fr]' : 'grid-cols-[0fr]'}">
-				<span class="overflow-hidden transition-opacity duration-300 pl-3 text-sm font-medium text-white {isOpen ? 'opacity-100' : 'opacity-0'}">
+				<span class="overflow-hidden transition-opacity duration-300 text-sm font-medium text-white {isOpen ? 'opacity-100' : 'opacity-0'}">
 					Foocus.
 				</span>
 			</div>
