@@ -1,15 +1,50 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+	import { marked } from 'marked';
+	import 'easymde/dist/easymde.min.css';
 	import { notes } from '$lib/stores/notesStore.svelte';
 	import { fade } from 'svelte/transition';
 	import { Copy, Download, Trash2, Plus } from 'lucide-svelte';
 
 	let newNote = $state('');
 	let copied = $state<number | null>(null);
+	let textareaElement: HTMLTextAreaElement;
+	let mde: any;
+
+	onMount(async () => {
+		if (browser) {
+			const EasyMDE = (await import('easymde')).default;
+			mde = new EasyMDE({
+				element: textareaElement,
+				toolbar: [
+					"bold", "italic", "strikethrough", "|",
+					{ name: "heading-1", action: EasyMDE.toggleHeading1, className: "fa h1-text", title: "Heading 1" },
+					{ name: "heading-2", action: EasyMDE.toggleHeading2, className: "fa h2-text", title: "Heading 2" },
+					{ name: "heading-3", action: EasyMDE.toggleHeading3, className: "fa h3-text", title: "Heading 3" },
+					"|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview"
+				],
+				hideIcons: ["guide", "fullscreen", "side-by-side"],
+				spellChecker: false,
+				status: false,
+				placeholder: "Write your markdown notes here...",
+				forceSync: true,
+				previewRender: (plainText) => {
+					return '<div class="prose prose-invert prose-sm max-w-none markdown-body pl-2 pr-2 pt-1 pb-1">' + marked.parse(plainText) + '</div>';
+				}
+			});
+
+			mde.codemirror.on("change", () => {
+				newNote = mde.value();
+			});
+		}
+	});
 
 	function addNote() {
 		if (newNote.trim()) {
 			notes.addNote(newNote.trim());
 			newNote = '';
+			if (mde) mde.value('');
 		}
 	}
 
@@ -41,15 +76,10 @@
 
 	<!-- Input -->
 	<div class="space-y-3">
-		<textarea
-			bind:value={newNote}
-			placeholder="Write something…"
-			rows={3}
-			class="w-full resize-none rounded-xl px-4 py-3 text-sm text-white placeholder-[#A1A1A1] outline-none transition-all"
-			style="background: #0A0A0A; border: 1px solid #1a1a1a;"
-			onfocus={(e) => (e.currentTarget.style.borderColor = '#CCFF00')}
-			onblur={(e) => (e.currentTarget.style.borderColor = '#1a1a1a')}
-		></textarea>
+		<!-- EasyMDE wrapper -->
+		<div class="easymde-dark-override" style="--easymde-border: #1a1a1a; --easymde-bg: #0A0A0A;">
+			<textarea bind:this={textareaElement}></textarea>
+		</div>
 		<div class="flex justify-end">
 			<button
 				onclick={addNote}
@@ -89,7 +119,9 @@
 						style="background: #0A0A0A; border: 1px solid #1a1a1a;"
 						in:fade={{ duration: 250 }}
 					>
-						<p class="flex-1 whitespace-pre-wrap text-sm leading-relaxed text-white">{note.content}</p>
+						<div class="prose prose-invert prose-sm max-w-none flex-1 leading-relaxed markdown-body">
+							{@html marked(note.content)}
+						</div>
 						<div class="mt-4 flex items-center justify-between border-t pt-3" style="border-color: #1a1a1a">
 							<span class="text-[11px]" style="color: #A1A1A1">
 								{new Date(note.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}

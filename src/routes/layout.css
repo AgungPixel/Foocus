@@ -12,3 +12,22 @@
 	--base-font-family: 'Fira Mono', monospace;
 	--anchor-font-family: 'inherit';
 }
+
+::selection {
+	background: #CCFF00;
+	color: #000;
+}
+
+/* EasyMDE Dark Mode Override */
+.easymde-dark-override .editor-toolbar { border-color: #1a1a1a; background: #0A0A0A; opacity: 1 !important; }
+.easymde-dark-override .editor-toolbar > button { color: #A1A1A1 !important; transition: all 0.2s; }
+.easymde-dark-override .editor-toolbar > button:hover, .easymde-dark-override .editor-toolbar > button.active { background: #1a1a1a !important; color: #CCFF00 !important; border-color: #1a1a1a !important; }
+.easymde-dark-override .editor-toolbar > button::after { display: none !important; }
+.easymde-dark-override .CodeMirror { background: #0A0A0A !important; color: #fff !important; border-color: #1a1a1a !important; font-family: 'Fira Mono', monospace; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+.easymde-dark-override .CodeMirror-cursor { border-left-color: #CCFF00 !important; }
+.easymde-dark-override .editor-preview { background: #0A0A0A; color: #fff; padding: 12px; }
+
+/* EasyMDE Toolbar Custom Text Overrides */
+.easymde-dark-override .editor-toolbar > button.h1-text::before { content: "H1" !important; font-family: var(--heading-font-family); font-weight: bold; }
+.easymde-dark-override .editor-toolbar > button.h2-text::before { content: "H2" !important; font-family: var(--heading-font-family); font-weight: bold; }
+.easymde-dark-override .editor-toolbar > button.h3-text::before { content: "H3" !important; font-family: var(--heading-font-family); font-weight: bold; }

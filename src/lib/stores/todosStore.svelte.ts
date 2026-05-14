@@ -8,92 +8,88 @@ export interface Todo {
 	expiresAt?: number;
 }
 
-function createTodosStore() {
-	let todosArray = $state<Todo[]>([]);
+class TodosStore {
+	value = $state<Todo[]>([]);
 
-	if (browser) {
-		try {
-			const stored = localStorage.getItem('simple-todos');
-			if (stored) {
-				const now = Date.now();
-				const parsed = JSON.parse(stored);
-				// Filter out expired items immediately on load
-				todosArray = parsed.filter((t: Todo) => !(t.completed && t.expiresAt && now >= t.expiresAt));
-				if (parsed.length !== todosArray.length) {
-					localStorage.setItem('simple-todos', JSON.stringify(todosArray));
-				}
-			}
-		} catch (e) {
-			console.error('Failed to parse todos from localStorage:', e);
-			localStorage.removeItem('simple-todos');
-		}
-		
-		window.addEventListener('storage', (e) => {
-			if (e.key === 'simple-todos' && e.newValue) {
-				todosArray = JSON.parse(e.newValue);
-			}
-		});
-
-		// Auto-clear routine: check every 1 minute if any completed task has expired (24h)
-		setInterval(() => {
-			const now = Date.now();
-			let changed = false;
-			todosArray = todosArray.filter(t => {
-				if (t.completed && t.expiresAt && now >= t.expiresAt) {
-					changed = true;
-					return false;
-				}
-				return true;
-			});
-			if (changed) {
-				localStorage.setItem('simple-todos', JSON.stringify(todosArray));
-			}
-		}, 60000);
-	}
-
-	function saveStore(value: Todo[]) {
+	constructor() {
 		if (browser) {
-			localStorage.setItem('simple-todos', JSON.stringify(value));
+			try {
+				const stored = localStorage.getItem('simple-todos');
+				if (stored) {
+					const now = Date.now();
+					const parsed = JSON.parse(stored);
+					this.value = parsed.filter((t: Todo) => !(t.completed && t.expiresAt && now >= t.expiresAt));
+					if (parsed.length !== this.value.length) {
+						this.save();
+					}
+				}
+			} catch (e) {
+				console.error('Failed to parse todos from localStorage:', e);
+				localStorage.removeItem('simple-todos');
+			}
+			
+			window.addEventListener('storage', (e) => {
+				if (e.key === 'simple-todos' && e.newValue) {
+					this.value = JSON.parse(e.newValue);
+				}
+			});
+
+			setInterval(() => {
+				const now = Date.now();
+				let changed = false;
+				this.value = this.value.filter(t => {
+					if (t.completed && t.expiresAt && now >= t.expiresAt) {
+						changed = true;
+						return false;
+					}
+					return true;
+				});
+				if (changed) this.save();
+			}, 60000);
 		}
 	}
 
-	return {
-		get value() {
-			return todosArray;
-		},
-		addTodo: (text: string) => {
-			const newTodo: Todo = {
-				id: Date.now(),
-				text,
-				completed: false,
-				createdAt: new Date().toISOString()
-			};
-			todosArray = [...todosArray, newTodo];
-			saveStore(todosArray);
-		},
-		toggleTodo: (id: number) => {
-			todosArray = todosArray.map((todo) => {
-				if (todo.id === id) {
-					const completed = !todo.completed;
-					return { 
-						...todo, 
-						completed,
-						expiresAt: completed ? Date.now() + 24 * 60 * 60 * 1000 : undefined 
-					};
-				}
-				return todo;
-			});
-			saveStore(todosArray);
-		},
-		deleteTodo: (id: number) => {
-			todosArray = todosArray.filter((todo) => todo.id !== id);
-			saveStore(todosArray);
-		},
-		clearCompleted: () => {
-			todosArray = todosArray.filter((todo) => !todo.completed);
-			saveStore(todosArray);
+	private save() {
+		if (browser) {
+			localStorage.setItem('simple-todos', JSON.stringify(this.value));
 		}
-	};
+	}
+
+	addTodo(text: string) {
+		const newTodo: Todo = {
+			id: Date.now(),
+			text,
+			completed: false,
+			createdAt: new Date().toISOString()
+		};
+		this.value = [...this.value, newTodo];
+		this.save();
+	}
+
+	toggleTodo(id: number) {
+		this.value = this.value.map((todo) => {
+			if (todo.id === id) {
+				const completed = !todo.completed;
+				return { 
+					...todo, 
+					completed,
+					expiresAt: completed ? Date.now() + 24 * 60 * 60 * 1000 : undefined 
+				};
+			}
+			return todo;
+		});
+		this.save();
+	}
+
+	deleteTodo(id: number) {
+		this.value = this.value.filter((todo) => todo.id !== id);
+		this.save();
+	}
+
+	clearCompleted() {
+		this.value = this.value.filter((todo) => !todo.completed);
+		this.save();
+	}
 }
 
-export const todos = createTodosStore();
+export const todos = new TodosStore();
