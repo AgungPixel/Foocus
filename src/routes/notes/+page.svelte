@@ -49,11 +49,11 @@
 	}
 
 	function downloadNote(content: string, index: number) {
-		const blob = new Blob([content], { type: 'text/plain' });
+		const blob = new Blob([content], { type: 'text/markdown' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = `note-${index + 1}.txt`;
+		a.download = `note-${index + 1}.md`;
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);

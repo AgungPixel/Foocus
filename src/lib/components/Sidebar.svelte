@@ -31,7 +31,7 @@
 	let isMobile = $state(false);
 
 	$effect(() => {
-		const checkMobile = () => (isMobile = window.innerWidth < 1024);
+		const checkMobile = () => (isMobile = window.innerWidth < 768);
 		checkMobile();
 		window.addEventListener('resize', checkMobile);
 		return () => window.removeEventListener('resize', checkMobile);
@@ -51,7 +51,7 @@
 
 {#if isOpen}
 	<div
-		class="fixed inset-0 z-40 bg-black/80 md:hidden"
+		class="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
 		transition:fade={{ duration: 150 }}
 		role="button"
 		tabindex="0"
