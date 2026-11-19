@@ -10,3 +10,21 @@ export interface Todo {
 	completed: boolean;
 	createdAt: string;
 }
+
+export type BlockType = 'paragraph' | 'heading1' | 'heading2' | 'bullet' | 'todo';
+
+export interface Block {
+	id: string;
+	type: BlockType;
+	content: string;
+	checked?: boolean;
+}
+
+export interface Page {
+	id: string;
+	title: string;
+	parentId: string | null;
+	blocks: Block[];
+	createdAt: string;
+	updatedAt: string;
+}

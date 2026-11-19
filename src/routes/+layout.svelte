@@ -21,8 +21,13 @@
 		'/': 'Dashboard',
 		'/notes': 'Notes',
 		'/todos': 'Tasks',
+		'/pages': 'Pages',
+		'/sync': 'Sync'
 	};
-	const pageTitle = $derived(titles[$page.url.pathname] ?? 'Foocus');
+	const pageTitle = $derived(
+		titles[$page.url.pathname] ??
+			($page.url.pathname.startsWith('/pages/') ? 'Page' : 'Foocus')
+	);
 </script>
 
 <svelte:head>

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
-	import { House, NotebookPen, ListTodo, X, Info } from 'lucide-svelte';
+	import { House, NotebookPen, ListTodo, FileText, RefreshCw, X, Info } from 'lucide-svelte';
 	import { tooltip } from '$lib/actions/tooltip.js';
 
 	interface Props {
@@ -14,7 +14,9 @@
 	const menuItems = [
 		{ name: 'Dashboard', href: '/', icon: House },
 		{ name: 'Task List', href: '/todos', icon: ListTodo },
-		{ name: 'My Notes', href: '/notes', icon: NotebookPen }
+		{ name: 'My Notes', href: '/notes', icon: NotebookPen },
+		{ name: 'Pages', href: '/pages', icon: FileText },
+		{ name: 'Sync', href: '/sync', icon: RefreshCw }
 	];
 
 	function isActive(href: string): boolean {

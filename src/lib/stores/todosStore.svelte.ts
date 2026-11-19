@@ -86,6 +86,11 @@ class TodosStore {
 		this.save();
 	}
 
+	replaceAll(items: Todo[]) {
+		this.value = items;
+		this.save();
+	}
+
 	clearCompleted() {
 		this.value = this.value.filter((todo) => !todo.completed);
 		this.save();

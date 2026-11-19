@@ -50,6 +50,10 @@ function createNotesStore() {
 			notesArray = notesArray.filter((note) => note.id !== id);
 			saveStore(notesArray);
 		},
+		replaceAll: (items: Note[]) => {
+			notesArray = items;
+			saveStore(notesArray);
+		},
 		clearAll: () => {
 			notesArray = [];
 			if (browser) localStorage.removeItem('simple-notes');
