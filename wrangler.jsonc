@@ -12,11 +12,7 @@
 	"kv_namespaces": [
 		{
 			"binding": "FOOCUS_KV",
-			"id": "GANTI_DENGAN_ID_KV_KAMU"
-		},
-		{
-			"binding": "FOOCUS_KV",
 			"id": "4d70ee3934dc456a88e8652d5211f392"
-		}
+		},
 	]
 }
