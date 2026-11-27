@@ -1,9 +1,7 @@
 {
 	"name": "foocus",
 	"compatibility_date": "2025-01-01",
-	"compatibility_flags": [
-		"nodejs_compat"
-	],
+	"compatibility_flags": ["nodejs_compat"],
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"assets": {
 		"binding": "ASSETS",
@@ -13,6 +11,6 @@
 		{
 			"binding": "FOOCUS_KV",
 			"id": "4d70ee3934dc456a88e8652d5211f392"
-		},
+		}
 	]
 }

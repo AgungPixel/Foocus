@@ -55,7 +55,7 @@
 			bind:value={newTodoText}
 			onkeydown={handleKeyPress}
 			placeholder="Add a task…"
-			class="flex-1 rounded-xl px-4 py-3 text-sm text-white placeholder-[#A1A1A1] outline-none transition-all"
+			class="flex-1 rounded-xl px-4 py-3 text-sm text-white placeholder-[#A1A1A1] transition-all outline-none"
 			style="background: #0A0A0A; border: 1px solid #1a1a1a;"
 			onfocus={(e) => (e.currentTarget.style.borderColor = '#CCFF00')}
 			onblur={(e) => (e.currentTarget.style.borderColor = '#1a1a1a')}
@@ -80,7 +80,7 @@
 			{#each todos.value as todo (todo.id)}
 				<button
 					onclick={() => (todo.completed ? todos.deleteTodo(todo.id) : todos.toggleTodo(todo.id))}
-					class="w-full flex flex-col items-start gap-1 rounded-xl px-5 py-4 transition-all duration-150 text-left cursor-pointer group"
+					class="group flex w-full cursor-pointer flex-col items-start gap-1 rounded-xl px-5 py-4 text-left transition-all duration-150"
 					style="background: #0A0A0A; border: 1px solid #1a1a1a;"
 					in:fly={{ y: 8, duration: 200 }}
 					out:fade={{ duration: 150 }}
@@ -98,21 +98,35 @@
 						>
 							{todo.text}
 						</span>
-						
+
 						<!-- Dynamic Status Icon -->
-						<div class="flex h-5 w-5 shrink-0 items-center justify-center transition-colors duration-200">
+						<div
+							class="flex h-5 w-5 shrink-0 items-center justify-center transition-colors duration-200"
+						>
 							{#if todo.completed}
-								<CheckCircle2 size={16} strokeWidth={2.5} class="block group-hover:hidden text-[#CCFF00] opacity-80" />
-								<Trash2 size={16} strokeWidth={2} class="hidden group-hover:block text-[#ff4444]" />
+								<CheckCircle2
+									size={16}
+									strokeWidth={2.5}
+									class="block text-[#CCFF00] opacity-80 group-hover:hidden"
+								/>
+								<Trash2 size={16} strokeWidth={2} class="hidden text-[#ff4444] group-hover:block" />
 							{:else}
-								<Circle size={16} strokeWidth={2} class="block group-hover:hidden text-[#333]" />
-								<CheckCircle2 size={16} strokeWidth={2.5} class="hidden group-hover:block text-[#CCFF00]" />
+								<Circle size={16} strokeWidth={2} class="block text-[#333] group-hover:hidden" />
+								<CheckCircle2
+									size={16}
+									strokeWidth={2.5}
+									class="hidden text-[#CCFF00] group-hover:block"
+								/>
 							{/if}
 						</div>
 					</div>
-					
+
 					{#if todo.completed && todo.expiresAt}
-						<span class="text-[11px] font-medium transition-colors mt-0.5" style="color: #A1A1A1" class:group-hover:text-[#ff4444]={true}>
+						<span
+							class="mt-0.5 text-[11px] font-medium transition-colors"
+							style="color: #A1A1A1"
+							class:group-hover:text-[#ff4444]={true}
+						>
 							Click again to delete (Auto-clears in {formatTimeLeft(todo.expiresAt)})
 						</span>
 					{/if}

@@ -1,29 +1,28 @@
 # Foocus
 
-Ruang kerja pribadi yang sederhana dan minim distraksi untuk mengelola tugas, catatan, dan halaman tulisan di satu tempat. Data tersimpan di browser kamu, dan bisa disamakan antar perangkat lewat kode sync.
+Ruang kerja pribadi yang sederhana dan minim distraksi untuk mengelola tugas dan catatan di satu tempat. Data tersimpan lokal di browser kamu, dan bisa disinkronkan otomatis antar perangkat lewat kode sync.
 
 ## Fitur
 
-- **Dashboard**: ringkasan jumlah tugas yang belum selesai dan jumlah catatan.
-- **Tasks**: daftar tugas dengan centang selesai. Tugas yang sudah selesai otomatis dihapus setelah 24 jam.
-- **Notes**: catatan Markdown dengan toolbar (bold, italic, heading, list, link, gambar) dan mode preview. Bisa disalin dan diunduh sebagai file `.md`.
-- **Pages**: halaman tulisan berbasis blok (paragraf, heading, bullet, to-do) dengan shortcut Markdown (`# `, `## `, `- `, `[] `) dan sub-halaman.
-- **Sync**: samakan Tasks, Notes, dan Pages antar perangkat memakai satu kode sync.
-- **Tampilan gelap** yang responsif, dengan sidebar yang bisa dilipat.
+- **Dashboard**: ringkasan jumlah tugas yang belum selesai, jumlah catatan, dan akses cepat ke catatan terbaru.
+- **Tasks**: daftar tugas dengan centang selesai. Tugas yang sudah selesai otomatis dibersihkan setelah 24 jam.
+- **Notes**: catatan dan halaman terpadu berbasis blok (paragraf, heading, bullet, to-do) dengan shortcut Markdown (`# `, `## `, `- `, `[] `), dukungan paste Markdown multi-baris, sub-halaman bersarang, live preview Markdown, serta salin/unduh sebagai file `.md`.
+- **Sync**: sinkronisasi dua arah (_Two-Way Smart Merge_ per item dengan _tombstones_) untuk menyamakan Tasks dan Notes antar perangkat secara otomatis tanpa saling menimpa.
+- **Tampilan gelap** hitam pekat minimalis dengan aksen neon (`#CCFF00`) dan sidebar yang bisa dilipat.
 
 ## Teknologi
 
-| Bagian                   | Teknologi                                           |
-| ------------------------ | --------------------------------------------------- |
-| Framework                | [SvelteKit](https://svelte.dev/docs/kit) + Svelte 5 |
-| Bahasa                   | TypeScript                                          |
-| Styling                  | Tailwind CSS v4, Skeleton UI                        |
-| Ikon                     | lucide-svelte                                       |
-| Editor & render Markdown | EasyMDE, marked                                     |
-| Penyimpanan lokal        | `localStorage`                                      |
-| Penyimpanan sync         | Cloudflare KV                                       |
-| Deploy                   | Cloudflare (`adapter-cloudflare`)                   |
-| Test                     | Vitest, Playwright                                  |
+| Bagian            | Teknologi                                           |
+| ----------------- | --------------------------------------------------- |
+| Framework         | [SvelteKit](https://svelte.dev/docs/kit) + Svelte 5 |
+| Bahasa            | TypeScript                                          |
+| Styling           | Tailwind CSS v4, Skeleton UI                        |
+| Ikon              | lucide-svelte                                       |
+| Render Markdown   | marked                                              |
+| Penyimpanan lokal | `localStorage`                                      |
+| Penyimpanan sync  | Cloudflare KV                                       |
+| Deploy            | Cloudflare (`adapter-cloudflare`)                   |
+| Test              | Vitest, Playwright                                  |
 
 ## Memulai
 
@@ -52,26 +51,27 @@ Buka alamat yang tampil di terminal (biasanya http://localhost:5173).
 
 ## Struktur project
 
-```
+```text
 src/
 ├── lib/
 │   ├── actions/      # Svelte actions (tooltip, autoresize)
 │   ├── components/   # Komponen UI (Sidebar)
-│   ├── stores/       # State + penyimpanan (notes, todos, pages, sync)
-│   └── types/        # Tipe TypeScript bersama
+│   ├── stores/       # State + penyimpanan (notes, todos, sync)
+│   ├── types/        # Tipe TypeScript bersama
+│   └── utils/        # Helper Markdown & mesin merge sync
 └── routes/
-    ├── +layout.svelte    # Kerangka halaman (header + sidebar)
+    ├── +layout.svelte    # Kerangka halaman (header + sidebar + status sync)
     ├── +page.svelte      # Dashboard
     ├── todos/            # Halaman Tasks
-    ├── notes/            # Halaman Notes
-    ├── pages/            # Daftar halaman dan editor blok
+    ├── notes/            # Daftar catatan & editor blok terpadu (+ sub-halaman)
+    ├── pages/            # Redirect kompatibilitas ke /notes
     ├── sync/             # Halaman pengaturan sync
     └── api/sync/[code]/  # Endpoint penyimpanan sync (Cloudflare KV)
 ```
 
 ## Menyiapkan Sync
 
-Sync memakai Cloudflare KV sebagai tempat penyimpanan.
+Sync memakai Cloudflare KV sebagai tempat penyimpanan (gratis dalam kuota _free tier_).
 
 1. Buat KV namespace:
    ```sh
@@ -87,8 +87,8 @@ Sync memakai Cloudflare KV sebagai tempat penyimpanan.
 
 Catatan penting:
 
-- Kode sync berfungsi seperti password. Siapa pun yang memilikinya bisa membaca dan menimpa data kamu.
-- **Upload** menimpa data di cloud, **Download** menimpa data di perangkat. Belum ada penggabungan otomatis.
+- Kode sync berfungsi seperti password. Siapa pun yang memilikinya bisa mengakses dan menggabungkan data kamu.
+- Sync menggunakan **Two-Way Smart Merge** per item (`updatedAt` terbaru menang, penghapusan dilacak dengan _tombstone_) dan hanya mengirim `PUT` ke Cloudflare KV jika ada perubahan data.
 
 ## Penyimpanan data
 
